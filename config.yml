@@ -1,0 +1,10 @@
+mongo:
+  host: cluster0.lvynvon.mongodb.net
+  port: '---'
+  username: helpdesk
+  password: helpdesk
+  database: helpdesk
+tokens:
+  secret: 491d364a655949e0fee8331237e2029e400e7c9b2534017455be13d7d01c4c5be21a4940
+  expires: 900
+elasticsearch: {}
