@@ -1,16 +1,4 @@
-/*
- *       .                             .o8                     oooo
- *    .o8                             "888                     `888
- *  .o888oo oooo d8b oooo  oooo   .oooo888   .ooooo.   .oooo.o  888  oooo
- *    888   `888""8P `888  `888  d88' `888  d88' `88b d88(  "8  888 .8P'
- *    888    888      888   888  888   888  888ooo888 `"Y88b.   888888.
- *    888 .  888      888   888  888   888  888    .o o.  )88b  888 `88b.
- *    "888" d888b     `V88V"V8P' `Y8bod88P" `Y8bod8P' 8""888P' o888o o888o
- *  ========================================================================
- *  Author:     Chris Brame
- *  Updated:    1/20/19 4:46 PM
- *  Copyright (c) 2014-2019. All rights reserved.
- */
+
 
 'use strict'
 
@@ -116,7 +104,7 @@ define([
     if (start !== -1) {
       try {
         options = helpers.util.str2json(string.substr(start))
-      } catch (e) {}
+      } catch (e) { }
     }
 
     return options
@@ -378,7 +366,7 @@ define([
     $(document).off('keyup', '.online-list-search-box input[type="text"]', onSearchKeyUp)
     $(document).on('keyup', '.online-list-search-box input[type="text"]', onSearchKeyUp)
 
-    function onSearchKeyUp () {
+    function onSearchKeyUp() {
       var $searchBox = $('.online-list-search-box').find('input')
       var searchTerm = $searchBox.val().toLowerCase()
 
@@ -546,7 +534,7 @@ define([
     })
   }
 
-  function updateInput (object) {
+  function updateInput(object) {
     // clear wrapper classes
     object.closest('.uk-input-group').removeClass('uk-input-group-danger uk-input-group-success uk-input-group-nocolor')
     object
@@ -1026,7 +1014,7 @@ define([
     flashTimeout()
   }
 
-  function flashTimeout () {
+  function flashTimeout() {
     var flashText = $('.flash-message').find('.flash-text')
     if (flashText.length < 1) return
     flashText.stop().animate({ top: '-50px' }, 500, function () {
@@ -1537,7 +1525,7 @@ define([
   helpers.getShortDateWithTimeFormat = function () {
     return `${helpers.getShortDateFormat()} ${helpers.getTimeFormat()}`
   }
-  
+
   helpers.getLongDateWithTimeFormat = function () {
     return `${helpers.getLongDateFormat()} ${helpers.getTimeFormat()}`
   }
@@ -1609,7 +1597,7 @@ define([
     messageForm.bind('submit', newMessageSubmit)
   }
 
-  function newMessageSubmit (e) {
+  function newMessageSubmit(e) {
     e.preventDefault()
     var form = $('#newMessageForm')
     var formData = form.serializeObject()
@@ -1925,7 +1913,7 @@ define([
     })
   }
 
-  function stringStartsWith (string, prefix) {
+  function stringStartsWith(string, prefix) {
     return string.slice(0, prefix.length) === prefix
   }
 

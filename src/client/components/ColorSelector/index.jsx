@@ -1,16 +1,4 @@
-/*
- *       .                             .o8                     oooo
- *    .o8                             "888                     `888
- *  .o888oo oooo d8b oooo  oooo   .oooo888   .ooooo.   .oooo.o  888  oooo
- *    888   `888""8P `888  `888  d88' `888  d88' `88b d88(  "8  888 .8P'
- *    888    888      888   888  888   888  888ooo888 `"Y88b.   888888.
- *    888 .  888      888   888  888   888  888    .o o.  )88b  888 `88b.
- *    "888" d888b     `V88V"V8P' `Y8bod88P" `Y8bod8P' 8""888P' o888o o888o
- *  ========================================================================
- *  Author:     Chris Brame
- *  Updated:    1/20/19 4:46 PM
- *  Copyright (c) 2014-2019. All rights reserved.
- */
+
 
 import React from 'react'
 import PropTypes from 'prop-types'
@@ -19,14 +7,14 @@ import $ from 'jquery'
 import helpers from 'lib/helpers'
 
 class ColorSelector extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       selectedColor: ''
     }
   }
 
-  static getRandomColor () {
+  static getRandomColor() {
     const letters = '0123456789ABCDEF'
     let color = '#'
     for (let i = 0; i < 6; i++) color += letters[Math.floor(Math.random() * 16)]
@@ -34,7 +22,7 @@ class ColorSelector extends React.Component {
     return color
   }
 
-  static getContrast (hexcolor) {
+  static getContrast(hexcolor) {
     hexcolor = hexcolor.replace('#', '')
     if (hexcolor.length === 3) {
       const v = hexcolor[0]
@@ -47,12 +35,12 @@ class ColorSelector extends React.Component {
     return yiq >= 128 ? '#444' : '#f7f8fa'
   }
 
-  componentDidMount () {
+  componentDidMount() {
     helpers.UI.inputs()
     this.setState({ selectedColor: this.props.defaultColor }, this.updateColorButton)
   }
 
-  componentDidUpdate (prevProps) {
+  componentDidUpdate(prevProps) {
     if (this.props.defaultColor !== prevProps.defaultColor)
       this.setState(
         {
@@ -62,7 +50,7 @@ class ColorSelector extends React.Component {
       )
   }
 
-  generateRandomColor (event) {
+  generateRandomColor(event) {
     event.preventDefault()
     const $currentTarget = $(event.target)
     if ($currentTarget.length > 0) {
@@ -82,12 +70,12 @@ class ColorSelector extends React.Component {
     }
   }
 
-  updateColorButton () {
+  updateColorButton() {
     const fgColor = ColorSelector.getContrast(this.state.selectedColor.substring(1))
     $(this.colorButton).css({ background: this.state.selectedColor, color: fgColor })
   }
 
-  onInputValueChange (e) {
+  onInputValueChange(e) {
     const val = e.target.value
     if (this.props.onChange) this.props.onChange(e)
 
@@ -99,7 +87,7 @@ class ColorSelector extends React.Component {
     )
   }
 
-  revertColor () {
+  revertColor() {
     this.setState(
       {
         selectedColor: this.props.defaultColor
@@ -108,7 +96,7 @@ class ColorSelector extends React.Component {
     )
   }
 
-  render () {
+  render() {
     return (
       <div
         className={this.props.parentClass}

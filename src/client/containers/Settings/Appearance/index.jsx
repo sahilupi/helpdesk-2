@@ -1,16 +1,4 @@
-/*
- *       .                             .o8                     oooo
- *    .o8                             "888                     `888
- *  .o888oo oooo d8b oooo  oooo   .oooo888   .ooooo.   .oooo.o  888  oooo
- *    888   `888""8P `888  `888  d88' `888  d88' `88b d88(  "8  888 .8P'
- *    888    888      888   888  888   888  888ooo888 `"Y88b.   888888.
- *    888 .  888      888   888  888   888  888    .o o.  )88b  888 `88b.
- *    "888" d888b     `V88V"V8P' `Y8bod88P" `Y8bod8P' 8""888P' o888o o888o
- *  ========================================================================
- *  Author:     Chris Brame
- *  Updated:    1/20/19 4:46 PM
- *  Copyright (c) 2014-2019. All rights reserved.
- */
+
 
 import React from 'react'
 import PropTypes from 'prop-types'
@@ -94,14 +82,14 @@ const colorMap = {
 }
 
 class AppearanceSettings extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       selectedColorScheme: 'light'
     }
   }
 
-  componentDidUpdate () {
+  componentDidUpdate() {
     const colorScheme = this.calcColorScheme()
     if (this.state.selectedColorScheme !== colorScheme)
       this.setState({
@@ -109,17 +97,17 @@ class AppearanceSettings extends React.Component {
       })
   }
 
-  getSettingsValue (name) {
+  getSettingsValue(name) {
     return this.props.settings.getIn(['settings', name, 'value'])
       ? this.props.settings.getIn(['settings', name, 'value'])
       : ''
   }
 
-  updateSetting (name, value, stateName) {
+  updateSetting(name, value, stateName) {
     this.props.updateSetting({ name, value, stateName })
   }
 
-  calcColorScheme () {
+  calcColorScheme() {
     let colorScheme = 'light'
     if (this.getSettingsValue('colorSecondary') === '#2f3640') colorScheme = 'dark'
     else if (this.getSettingsValue('colorHeaderBG') === '#112d4e') colorScheme = 'bluejean'
@@ -132,7 +120,7 @@ class AppearanceSettings extends React.Component {
     return colorScheme
   }
 
-  onBuiltInColorSelectChange (e) {
+  onBuiltInColorSelectChange(e) {
     if (!e.target || !e.target.value) return
     this.headerBGColorSelect.setState(
       { selectedColor: colorMap[e.target.value].headerBG },
@@ -160,7 +148,7 @@ class AppearanceSettings extends React.Component {
     )
   }
 
-  saveColorScheme () {
+  saveColorScheme() {
     const colors = [
       { name: 'color:headerbg', value: this.headerBGColorSelect.state.selectedColor },
       { name: 'color:headerprimary', value: this.headerPrimaryColorSelect.state.selectedColor },
@@ -173,7 +161,7 @@ class AppearanceSettings extends React.Component {
     this.props.updateColorScheme(colors)
   }
 
-  render () {
+  render() {
     const { active } = this.props
 
     return (

@@ -1,16 +1,4 @@
-/*
- *       .                             .o8                     oooo
- *    .o8                             "888                     `888
- *  .o888oo oooo d8b oooo  oooo   .oooo888   .ooooo.   .oooo.o  888  oooo
- *    888   `888""8P `888  `888  d88' `888  d88' `88b d88(  "8  888 .8P'
- *    888    888      888   888  888   888  888ooo888 `"Y88b.   888888.
- *    888 .  888      888   888  888   888  888    .o o.  )88b  888 `88b.
- *    "888" d888b     `V88V"V8P' `Y8bod88P" `Y8bod8P' 8""888P' o888o o888o
- *  ========================================================================
- *  Author:     Chris Brame
- *  Updated:    1/20/19 4:46 PM
- *  Copyright (c) 2014-2019. All rights reserved.
- */
+
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
@@ -24,19 +12,19 @@ import Helpers from 'modules/helpers'
 // import './style.sass';
 
 class Submenu extends Component {
-  componentDidMount () {
+  componentDidMount() {
     this.buildFloatingMenu(this.props.id)
   }
 
-  componentDidUpdate () {
+  componentDidUpdate() {
     this.buildFloatingMenu(this.props.id)
   }
 
-  shouldComponentUpdate (nextProps) {
+  shouldComponentUpdate(nextProps) {
     return this.props.children !== nextProps.children
   }
 
-  buildFloatingMenu (navId) {
+  buildFloatingMenu(navId) {
     if (this.props.children) {
       let $sideBarToRight = $('.sidebar-to-right')
       $sideBarToRight.find('#side-nav-sub-' + navId).remove()
@@ -47,12 +35,12 @@ class Submenu extends Component {
 
         li = $(
           '<li class="' +
-            (this.props.children.props.active ? ' active ' : '') +
-            '"><a href="' +
-            this.props.children.props.href +
-            '"><span>' +
-            this.props.children.props.text +
-            '</span></a></li>'
+          (this.props.children.props.active ? ' active ' : '') +
+          '"><a href="' +
+          this.props.children.props.href +
+          '"><span>' +
+          this.props.children.props.text +
+          '</span></a></li>'
         )
         ul.append(li)
       } else {
@@ -63,12 +51,12 @@ class Submenu extends Component {
             if (this.props.children[i].props.hasSeperator) ul.append('<hr />')
             li = $(
               '<li class="' +
-                (this.props.children[i].props.active ? ' active ' : '') +
-                '"><a href="' +
-                this.props.children[i].props.href +
-                '"><span>' +
-                this.props.children[i].props.text +
-                '</span></a></li>'
+              (this.props.children[i].props.active ? ' active ' : '') +
+              '"><a href="' +
+              this.props.children[i].props.href +
+              '"><span>' +
+              this.props.children[i].props.text +
+              '</span></a></li>'
             )
             ul.append(li)
           }
@@ -84,7 +72,7 @@ class Submenu extends Component {
     }
   }
 
-  render () {
+  render() {
     return (
       <ul
         id={'side-nav-accordion-' + this.props.id}

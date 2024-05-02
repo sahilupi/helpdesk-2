@@ -197,7 +197,7 @@ class Sidebar extends React.Component {
                 active={activeItem === 'departments'}
               />
             )}
-            {sessionUser && Helpers.canUser('reports:view') && (
+            {/* {sessionUser && Helpers.canUser('reports:view') && (
               <SidebarItem
                 text='Reports'
                 icon='assessment'
@@ -214,24 +214,24 @@ class Sidebar extends React.Component {
                     href='/reports/generate'
                     active={activeSubItem === 'reports-generate'}
                   />
-                  {/*<NavSeparator />*/}
-                  {/*<SubmenuItem*/}
-                  {/*  text='Group Breakdown'*/}
-                  {/*  icon='supervisor_account'*/}
-                  {/*  href='/reports/breakdown/group'*/}
-                  {/*  active={activeSubItem === 'reports-breakdown-group'}*/}
-                  {/*/>*/}
-                  {/*<SubmenuItem*/}
-                  {/*  text='User Breakdown'*/}
-                  {/*  icon='perm_identity'*/}
-                  {/*  href='/reports/breakdown/user'*/}
-                  {/*  active={activeSubItem === 'reports-breakdown-user'}*/}
-                  {/*/>*/}
+                   <NavSeparator /> 
+                   <SubmenuItem 
+                    text='Group Breakdown' 
+                    icon='supervisor_account'
+                    href='/reports/breakdown/group'
+                    active={activeSubItem === 'reports-breakdown-group'}
+                   /> 
+                   <SubmenuItem 
+                    text='User Breakdown'
+                    icon='perm_identity'
+                    href='/reports/breakdown/user'
+                  active={activeSubItem === 'reports-breakdown-user'} 
+                  /> 
                 </Submenu>
               </SidebarItem>
-            )}
+            )} */}
 
-            {/*{this.renderPlugins()}*/}
+            {/* {this.renderPlugins()} */}
 
             {sessionUser && Helpers.canUser('notices:view') && (
               <SidebarItem
@@ -328,7 +328,7 @@ class Sidebar extends React.Component {
             )}
             <NavSeparator />
             <SidebarItem href='/about' icon='help' text='About' active={activeItem === 'about'} />
-            {/*<SidebarItem href={'https://www.trudesk.io'} icon={'cloud'} text={'Cloud'} target={'_blank'} />*/}
+            {/* <SidebarItem href={'https://www.trudesk.io'} icon={'cloud'} text={'Cloud'} target={'_blank'} /> */}
           </ul>
         </div>
         <div className='side-nav-bottom-panel'>

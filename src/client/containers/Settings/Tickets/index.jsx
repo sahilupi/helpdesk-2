@@ -1,16 +1,4 @@
-/*
- *       .                             .o8                     oooo
- *    .o8                             "888                     `888
- *  .o888oo oooo d8b oooo  oooo   .oooo888   .ooooo.   .oooo.o  888  oooo
- *    888   `888""8P `888  `888  d88' `888  d88' `88b d88(  "8  888 .8P'
- *    888    888      888   888  888   888  888ooo888 `"Y88b.   888888.
- *    888 .  888      888   888  888   888  888    .o o.  )88b  888 `88b.
- *    "888" d888b     `V88V"V8P' `Y8bod88P" `Y8bod8P' 8""888P' o888o o888o
- *  ========================================================================
- *  Author:     Chris Brame
- *  Updated:    1/20/19 4:46 PM
- *  Copyright (c) 2014-2019. All rights reserved.
- */
+
 
 import React from 'react'
 import PropTypes from 'prop-types'
@@ -45,13 +33,13 @@ import EditStatusPartial from './editStatusPartial'
 import TicketStatusContainer from 'containers/Settings/Tickets/ticketStatusContainer'
 
 class TicketsSettings extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.getTicketTags = this.getTicketTags.bind(this)
   }
 
-  static toggleEditPriority (e) {
+  static toggleEditPriority(e) {
     const $parent = $(e.target).parents('.priority-wrapper')
     const $v = $parent.find('.view-priority')
     const $e = $parent.find('.edit-priority')
@@ -61,7 +49,7 @@ class TicketsSettings extends React.Component {
     }
   }
 
-  static toggleEditStatus (e) {
+  static toggleEditStatus(e) {
     const $parent = $(e.target).parents('.status-wrapper')
     const $v = $parent.find('.view-status')
     const $e = $parent.find('.edit-status')
@@ -71,7 +59,7 @@ class TicketsSettings extends React.Component {
     }
   }
 
-  static toggleEditTag (e) {
+  static toggleEditTag(e) {
     const $target = $(e.target)
     const $parent = $target.parents('.tag-wrapper')
     const $v = $parent.find('.view-tag')
@@ -82,7 +70,7 @@ class TicketsSettings extends React.Component {
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.getTicketTags(null, 0)
     const $tagPagination = $('#tagPagination')
     this.tagsPagination = UIKit.pagination($tagPagination, {
@@ -92,7 +80,7 @@ class TicketsSettings extends React.Component {
     $tagPagination.on('select.uk.pagination', this.getTicketTags)
   }
 
-  componentDidUpdate (prevProps) {
+  componentDidUpdate(prevProps) {
     if (prevProps.tagsSettings.totalCount !== this.props.tagsSettings.totalCount) {
       this.tagsPagination.pages = Math.ceil(this.props.tagsSettings.totalCount / 16)
         ? Math.ceil(this.props.tagsSettings.totalCount / 16)
@@ -103,39 +91,39 @@ class TicketsSettings extends React.Component {
     }
   }
 
-  getSetting (name) {
+  getSetting(name) {
     return this.props.settings.getIn(['settings', name, 'value'])
       ? this.props.settings.getIn(['settings', name, 'value'])
       : ''
   }
 
-  getTicketTypes () {
+  getTicketTypes() {
     return this.props.settings && this.props.settings.get('ticketTypes')
       ? this.props.settings.get('ticketTypes').toArray()
       : []
   }
 
-  getPriorities () {
+  getPriorities() {
     return this.props.settings && this.props.settings.get('priorities')
       ? this.props.settings.get('priorities').toArray()
       : []
   }
 
-  getStatus () {
+  getStatus() {
     return this.props.settings && this.props.settings.get('status') ? this.props.settings.get('status').toArray() : []
   }
 
-  getTicketTags (e, page) {
+  getTicketTags(e, page) {
     if (e) e.preventDefault()
     this.props.tagsUpdateCurrentPage(page)
     this.props.getTagsWithPage({ limit: 16, page })
   }
 
-  onDefaultTicketTypeChange (e) {
+  onDefaultTicketTypeChange(e) {
     this.props.updateSetting({ name: 'ticket:type:default', value: e.target.value, stateName: 'defaultTicketType' })
   }
 
-  onAllowPublicTicketsChange (e) {
+  onAllowPublicTicketsChange(e) {
     this.props.updateSetting({
       name: 'allowPublicTickets:enable',
       value: e.target.checked,
@@ -144,7 +132,7 @@ class TicketsSettings extends React.Component {
     })
   }
 
-  onAllowAgentUserTicketsChange (e) {
+  onAllowAgentUserTicketsChange(e) {
     this.props.updateSetting({
       name: 'allowAgentUserTickets:enable',
       value: e.target.checked,
@@ -153,7 +141,7 @@ class TicketsSettings extends React.Component {
     })
   }
 
-  onShowOverdueChange (e) {
+  onShowOverdueChange(e) {
     this.props.updateSetting({
       name: 'showOverdueTickets:enable',
       value: e.target.checked,
@@ -162,7 +150,7 @@ class TicketsSettings extends React.Component {
     })
   }
 
-  onPlayNewTicketSoundChange (e) {
+  onPlayNewTicketSoundChange(e) {
     this.props.updateSetting({
       name: 'playNewTicketSound:enable',
       value: e.target.checked,
@@ -171,24 +159,24 @@ class TicketsSettings extends React.Component {
     })
   }
 
-  showModal (e, modal, props) {
+  showModal(e, modal, props) {
     e.preventDefault()
     this.props.showModal(modal, props)
   }
 
-  onRemovePriorityClicked (e, priority) {
+  onRemovePriorityClicked(e, priority) {
     e.preventDefault()
     this.props.showModal('DELETE_PRIORITY', { priority })
   }
 
-  onRemoveStatusClicked (e, stat) {
+  onRemoveStatusClicked(e, stat) {
     e.preventDefault()
     console.log(stat)
     console.log(stat.get('_id'))
     this.props.deleteStatus(stat.get('id'))
   }
 
-  onSubmitUpdateTag (e, tagId) {
+  onSubmitUpdateTag(e, tagId) {
     e.preventDefault()
     e.persist()
     const name = e.target.name.value
@@ -210,7 +198,7 @@ class TicketsSettings extends React.Component {
       })
   }
 
-  onRemoveTagClicked (e, tag) {
+  onRemoveTagClicked(e, tag) {
     UIKit.modal.confirm(
       `Really delete tag <strong>${tag.get()}</strong><br />
         <i style="font-size: 13px; color: #e53935">This will remove the tag from all associated tickets.</i>`,
@@ -237,7 +225,7 @@ class TicketsSettings extends React.Component {
     )
   }
 
-  render () {
+  render() {
     const { active, viewdata } = this.props
     const mappedTypes = this.getTicketTypes().map(function (type) {
       return { text: type.get('name'), value: type.get('_id') }

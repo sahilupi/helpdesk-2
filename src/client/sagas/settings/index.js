@@ -1,16 +1,4 @@
-/*
- *       .                             .o8                     oooo
- *    .o8                             "888                     `888
- *  .o888oo oooo d8b oooo  oooo   .oooo888   .ooooo.   .oooo.o  888  oooo
- *    888   `888""8P `888  `888  d88' `888  d88' `88b d88(  "8  888 .8P'
- *    888    888      888   888  888   888  888ooo888 `"Y88b.   888888.
- *    888 .  888      888   888  888   888  888    .o o.  )88b  888 `88b.
- *    "888" d888b     `V88V"V8P' `Y8bod88P" `Y8bod8P' 8""888P' o888o o888o
- *  ========================================================================
- *  Author:     Chris Brame
- *  Updated:    1/20/19 4:46 PM
- *  Copyright (c) 2014-2019. All rights reserved.
- */
+
 
 import { call, put, takeLatest } from 'redux-saga/effects'
 import axios from 'axios'
@@ -38,7 +26,7 @@ import {
 import Log from '../../logger'
 import helpers from 'lib/helpers'
 
-function fetchSettings () {
+function fetchSettings() {
   return axios
     .get('/api/v1/settings')
     .then(res => {
@@ -49,7 +37,7 @@ function fetchSettings () {
     })
 }
 
-function * fetchFlow ({ payload }) {
+function* fetchFlow({ payload }) {
   try {
     const response = yield call(fetchSettings, payload)
     yield put({ type: FETCH_SETTINGS.SUCCESS, response })
@@ -60,7 +48,7 @@ function * fetchFlow ({ payload }) {
   }
 }
 
-function * updateSetting ({ payload, meta }) {
+function* updateSetting({ payload, meta }) {
   try {
     const response = yield call(api.settings.update, [payload])
     if (!payload.noSnackbar) helpers.UI.showSnackbar('Setting Saved Successfully', false)
@@ -70,7 +58,7 @@ function * updateSetting ({ payload, meta }) {
   }
 }
 
-function * updateMultipleSettings ({ payload }) {
+function* updateMultipleSettings({ payload }) {
   try {
     const response = yield call(api.settings.update, payload)
     yield put({ type: UPDATE_MULTIPLE_SETTINGS.SUCCESS, response })
@@ -82,7 +70,7 @@ function * updateMultipleSettings ({ payload }) {
   }
 }
 
-function * updateColorScheme ({ payload }) {
+function* updateColorScheme({ payload }) {
   try {
     const response = yield call(api.settings.update, payload)
     yield put({ type: UPDATE_COLORSCHEME.SUCCESS, response })
@@ -97,7 +85,7 @@ function * updateColorScheme ({ payload }) {
   }
 }
 
-function * checkMongoDBTools ({ payload }) {
+function* checkMongoDBTools({ payload }) {
   try {
     const response = yield call(api.settings.hasMongoDBTools, payload)
     yield put({ type: FETCH_MONGODB_TOOLS.SUCCESS, response })
@@ -106,7 +94,7 @@ function * checkMongoDBTools ({ payload }) {
   }
 }
 
-function * fetchBackups () {
+function* fetchBackups() {
   try {
     const response = yield call(api.settings.fetchBackups)
     yield put({ type: FETCH_BACKUPS.SUCCESS, response })
@@ -117,7 +105,7 @@ function * fetchBackups () {
   }
 }
 
-function * backupNow () {
+function* backupNow() {
   try {
     yield put({ type: BACKUP_NOW.PENDING })
     const response = yield call(api.settings.backupNow)
@@ -132,7 +120,7 @@ function * backupNow () {
   }
 }
 
-function * fetchDeletedTickets () {
+function* fetchDeletedTickets() {
   try {
     yield put({ type: FETCH_DELETED_TICKETS.PENDING })
     const response = yield call(api.settings.fetchDeletedTickets)
@@ -144,7 +132,7 @@ function * fetchDeletedTickets () {
   }
 }
 
-function * restoreDeletedTicket ({ payload }) {
+function* restoreDeletedTicket({ payload }) {
   try {
     const response = yield call(api.settings.restoreDeletedTicket, payload)
     yield put({ type: RESTORE_DELETED_TICKET.SUCCESS, response, payload })
@@ -156,7 +144,7 @@ function * restoreDeletedTicket ({ payload }) {
   }
 }
 
-function * permDeleteTicket ({ payload }) {
+function* permDeleteTicket({ payload }) {
   try {
     const response = yield call(api.settings.permDeleteTicket, payload)
     yield put({ type: PERM_DELETE_TICKET.SUCCESS, response, payload })
@@ -172,7 +160,7 @@ function * permDeleteTicket ({ payload }) {
   }
 }
 
-function * updateRoleOrder ({ payload }) {
+function* updateRoleOrder({ payload }) {
   try {
     const response = yield call(api.settings.updateRoleOrder, payload)
     yield put({ type: UPDATE_ROLE_ORDER.SUCCESS, response })
@@ -183,7 +171,7 @@ function * updateRoleOrder ({ payload }) {
   }
 }
 
-function * updatePermissions ({ payload }) {
+function* updatePermissions({ payload }) {
   try {
     yield put({ type: UPDATE_PERMISSIONS.PENDING })
     const response = yield call(api.settings.updatePermissions, payload)
@@ -196,7 +184,7 @@ function * updatePermissions ({ payload }) {
   }
 }
 
-function * createRole ({ payload }) {
+function* createRole({ payload }) {
   try {
     const response = yield call(api.settings.createRole, payload)
     yield put({ type: CREATE_ROLE.SUCCESS, response })
@@ -209,7 +197,7 @@ function * createRole ({ payload }) {
   }
 }
 
-function * deleteRole ({ payload }) {
+function* deleteRole({ payload }) {
   try {
     const response = yield call(api.settings.deleteRole, payload)
     yield put({ type: DELETE_ROLE.SUCCESS, response })
@@ -223,7 +211,7 @@ function * deleteRole ({ payload }) {
   }
 }
 
-export default function * settingsWatcher () {
+export default function* settingsWatcher() {
   yield takeLatest(FETCH_SETTINGS.ACTION, fetchFlow)
   yield takeLatest(UPDATE_SETTING.ACTION, updateSetting)
   yield takeLatest(UPDATE_MULTIPLE_SETTINGS.ACTION, updateMultipleSettings)

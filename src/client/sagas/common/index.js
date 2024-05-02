@@ -1,16 +1,4 @@
-/*
- *       .                             .o8                     oooo
- *    .o8                             "888                     `888
- *  .o888oo oooo d8b oooo  oooo   .oooo888   .ooooo.   .oooo.o  888  oooo
- *    888   `888""8P `888  `888  d88' `888  d88' `88b d88(  "8  888 .8P'
- *    888    888      888   888  888   888  888ooo888 `"Y88b.   888888.
- *    888 .  888      888   888  888   888  888    .o o.  )88b  888 `88b.
- *    "888" d888b     `V88V"V8P' `Y8bod88P" `Y8bod8P' 8""888P' o888o o888o
- *  ========================================================================
- *  Author:     Chris Brame
- *  Updated:    1/20/19 4:46 PM
- *  Copyright (c) 2014-2019. All rights reserved.
- */
+
 
 import { call, put, takeLatest } from 'redux-saga/effects'
 
@@ -20,7 +8,7 @@ import { FETCH_ROLES, FETCH_VIEWDATA, INIT_SOCKET, SET_SESSION_USER, UPDATE_SOCK
 import Log from '../../logger'
 import helpers from 'lib/helpers'
 
-function * initSocket ({ meta }) {
+function* initSocket({ meta }) {
   try {
     const s = io.connect({
       transports: ['polling', 'websocket']
@@ -33,7 +21,7 @@ function * initSocket ({ meta }) {
   }
 }
 
-function * updateSocket ({ payload }) {
+function* updateSocket({ payload }) {
   try {
     const s = payload.socket
     yield put({ type: UPDATE_SOCKET.SUCCESS, payload: { socket: s } })
@@ -43,7 +31,7 @@ function * updateSocket ({ payload }) {
   }
 }
 
-function * setSessionUser ({ payload }) {
+function* setSessionUser({ payload }) {
   try {
     const response = yield call(api.common.getSessionUser, payload)
     yield put({ type: SET_SESSION_USER.SUCCESS, payload: { sessionUser: response } })
@@ -58,7 +46,7 @@ function * setSessionUser ({ payload }) {
   }
 }
 
-function * fetchRoles ({ payload }) {
+function* fetchRoles({ payload }) {
   try {
     const response = yield call(api.common.fetchRoles, payload)
     yield put({ type: FETCH_ROLES.SUCCESS, response })
@@ -70,7 +58,7 @@ function * fetchRoles ({ payload }) {
   }
 }
 
-function * fetchViewData ({ payload, meta }) {
+function* fetchViewData({ payload, meta }) {
   yield put({ type: FETCH_VIEWDATA.PENDING })
   try {
     const response = yield call(api.common.fetchViewData)
@@ -84,7 +72,7 @@ function * fetchViewData ({ payload, meta }) {
   }
 }
 
-export default function * watcher () {
+export default function* watcher() {
   yield takeLatest(INIT_SOCKET.ACTION, initSocket)
   yield takeLatest(UPDATE_SOCKET.ACTION, updateSocket)
   yield takeLatest(SET_SESSION_USER.ACTION, setSessionUser)

@@ -1,16 +1,4 @@
-/*
- *       .                             .o8                     oooo
- *    .o8                             "888                     `888
- *  .o888oo oooo d8b oooo  oooo   .oooo888   .ooooo.   .oooo.o  888  oooo
- *    888   `888""8P `888  `888  d88' `888  d88' `88b d88(  "8  888 .8P'
- *    888    888      888   888  888   888  888ooo888 `"Y88b.   888888.
- *    888 .  888      888   888  888   888  888    .o o.  )88b  888 `88b.
- *    "888" d888b     `V88V"V8P' `Y8bod88P" `Y8bod8P' 8""888P' o888o o888o
- *  ========================================================================
- *  Author:     Chris Brame
- *  Updated:    1/20/19 4:46 PM
- *  Copyright (c) 2014-2019. All rights reserved.
- */
+
 
 import React from 'react'
 import PropTypes from 'prop-types'
@@ -21,7 +9,7 @@ import helpers from 'lib/helpers'
 
 class SingleSelect extends React.Component {
   value = ''
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     if (this.props.defaultValue) this.value = this.props.defaultValue
@@ -29,7 +17,7 @@ class SingleSelect extends React.Component {
     this.onSelectChange = this.onSelectChange.bind(this)
   }
 
-  componentDidMount () {
+  componentDidMount() {
     helpers.UI.selectize()
     const $select = $(this.select)
 
@@ -39,12 +27,12 @@ class SingleSelect extends React.Component {
     if (this.props.defaultValue) this.value = this.props.defaultValue
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     const selectize = this.select.selectize
     if (selectize) selectize.destroy()
   }
 
-  onSelectChange (e) {
+  onSelectChange(e) {
     if (e.target.value === '') {
       if (this.props.onSelectChange && this.props.multiple) this.props.onSelectChange(e, [])
       else return
@@ -56,13 +44,13 @@ class SingleSelect extends React.Component {
     if (this.value && this.props.onSelectChange) this.props.onSelectChange(e, this.value)
   }
 
-  componentDidUpdate (prevProps) {
+  componentDidUpdate(prevProps) {
     if (prevProps.defaultValue !== this.props.defaultValue && !this.value) this.value = this.props.defaultValue
 
     this.updateSelectizeItems()
   }
 
-  updateSelectizeItems () {
+  updateSelectizeItems() {
     if (this.select && this.select.selectize) {
       const self = this
       // Remove any options that were removed from Items array
@@ -89,7 +77,7 @@ class SingleSelect extends React.Component {
     }
   }
 
-  render () {
+  render() {
     let width = '100%'
 
     if (this.props.width) width = this.props.width
@@ -107,7 +95,7 @@ class SingleSelect extends React.Component {
             data-md-selectize-inline
             data-md-selectize-notextbox={this.props.showTextbox ? 'false' : 'true'}
             value={value}
-            onChange={() => {}}
+            onChange={() => { }}
             disabled={this.props.disabled}
             data-md-selectize-bottom='true'
             multiple={this.props.multiple}
