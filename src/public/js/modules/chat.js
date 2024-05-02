@@ -1,16 +1,4 @@
-/*
- *       .                             .o8                     oooo
- *    .o8                             "888                     `888
- *  .o888oo oooo d8b oooo  oooo   .oooo888   .ooooo.   .oooo.o  888  oooo
- *    888   `888""8P `888  `888  d88' `888  d88' `88b d88(  "8  888 .8P'
- *    888    888      888   888  888   888  888ooo888 `"Y88b.   888888.
- *    888 .  888      888   888  888   888  888    .o o.  )88b  888 `88b.
- *    "888" d888b     `V88V"V8P' `Y8bod88P" `Y8bod8P' 8""888P' o888o o888o
- *  ========================================================================
- *  Author:     Chris Brame
- *  Updated:    1/20/19 4:43 PM
- *  Copyright (c) 2014-2019. All rights reserved.
- */
+
 
 define('modules/chat', ['jquery', 'underscore', 'moment', 'modules/helpers', 'uikit', 'autogrow', 'history'], function (
   $,
@@ -225,7 +213,7 @@ define('modules/chat', ['jquery', 'underscore', 'moment', 'modules/helpers', 'ui
 
   var typingTimeout = {}
   var isTyping = {}
-  function stopTyping (cid, to) {
+  function stopTyping(cid, to) {
     isTyping[cid] = false
     typingTimeout[cid] = undefined
     var loggedInAccountId = loggedInAccount._id
@@ -285,7 +273,7 @@ define('modules/chat', ['jquery', 'underscore', 'moment', 'modules/helpers', 'ui
     })
   }
 
-  function bindChatWindowActions (convoId) {
+  function bindChatWindowActions(convoId) {
     var $chatBox = $('.chat-box[data-conversation-id="' + convoId + '"]')
     if ($chatBox.length < 1) {
       return false
@@ -403,7 +391,7 @@ define('modules/chat', ['jquery', 'underscore', 'moment', 'modules/helpers', 'ui
   }
 
   // Make this return messages with single HTTP request
-  function startConversation (owner, receiver, callback) {
+  function startConversation(owner, receiver, callback) {
     if (owner === receiver) {
       return callback('Invalid Participants')
     }
@@ -424,9 +412,9 @@ define('modules/chat', ['jquery', 'underscore', 'moment', 'modules/helpers', 'ui
           success: function (d) {
             var userMeta =
               data.conversation.userMeta[
-                _.findIndex(data.conversation.userMeta, function (item) {
-                  return item.userId.toString() === owner.toString()
-                })
+              _.findIndex(data.conversation.userMeta, function (item) {
+                return item.userId.toString() === owner.toString()
+              })
               ]
             if (userMeta && userMeta.deletedAt) {
               d.messages = _.filter(d.messages, function (message) {
@@ -447,7 +435,7 @@ define('modules/chat', ['jquery', 'underscore', 'moment', 'modules/helpers', 'ui
     })
   }
 
-  function loadChatMessages (chatBox, messageArray) {
+  function loadChatMessages(chatBox, messageArray) {
     var to = chatBox.attr('data-chat-userid')
 
     var chatMessage, chatMessageList, scroller
@@ -554,9 +542,9 @@ define('modules/chat', ['jquery', 'underscore', 'moment', 'modules/helpers', 'ui
 
       var userMeta =
         convo.userMeta[
-          _.findIndex(convo.userMeta, function (item) {
-            return item.userId.toString() === loggedInAccountId.toString()
-          })
+        _.findIndex(convo.userMeta, function (item) {
+          return item.userId.toString() === loggedInAccountId.toString()
+        })
         ]
       var html = '<div class="chat-box-position">'
       html += '<div class="chat-box" data-conversation-id="' + convo._id + '" data-chat-userid="' + user._id + '">'
@@ -626,7 +614,7 @@ define('modules/chat', ['jquery', 'underscore', 'moment', 'modules/helpers', 'ui
     socket.emit('$trudesk:chat:updateOnlineBubbles')
   }
 
-  function updateOnlineBubbles (usersOnline) {
+  function updateOnlineBubbles(usersOnline) {
     $('span[data-user-status-id]').each(function () {
       $(this)
         .removeClass('user-online user-idle')
@@ -655,7 +643,7 @@ define('modules/chat', ['jquery', 'underscore', 'moment', 'modules/helpers', 'ui
     })
   }
 
-  function createChatMessageDiv (message) {
+  function createChatMessageDiv(message) {
     var html = '<div class="chat-message chat-message-user uk-clearfix" data-chat-messageId="">'
     html += '<div class="chat-text-wrapper">'
     html += '<div class="chat-text chat-text-user">'
@@ -665,7 +653,7 @@ define('modules/chat', ['jquery', 'underscore', 'moment', 'modules/helpers', 'ui
     return html
   }
 
-  function createChatMessageFromUser (user, message) {
+  function createChatMessageFromUser(user, message) {
     var imageUrl = user.image
     if (_.isUndefined(imageUrl)) imageUrl = 'defaultProfile.jpg'
     var html = '<div class="chat-message uk-clearfix">'
@@ -687,7 +675,7 @@ define('modules/chat', ['jquery', 'underscore', 'moment', 'modules/helpers', 'ui
     return html
   }
 
-  function chatBoxTextAreaGrowCallback (self, oldHeight, newHeight) {
+  function chatBoxTextAreaGrowCallback(self, oldHeight, newHeight) {
     if (oldHeight === newHeight) {
       return true
     }

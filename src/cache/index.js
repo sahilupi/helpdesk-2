@@ -1,16 +1,4 @@
-/*
- *       .                             .o8                     oooo
- *    .o8                             "888                     `888
- *  .o888oo oooo d8b oooo  oooo   .oooo888   .ooooo.   .oooo.o  888  oooo
- *    888   `888""8P `888  `888  d88' `888  d88' `88b d88(  "8  888 .8P'
- *    888    888      888   888  888   888  888ooo888 `"Y88b.   888888.
- *    888 .  888      888   888  888   888  888    .o o.  )88b  888 `88b.
- *    "888" d888b     `V88V"V8P' `Y8bod88P" `Y8bod8P' 8""888P' o888o o888o
- *  ========================================================================
- *  Author:     Chris Brame
- *  Updated:    1/20/19 4:43 PM
- *  Copyright (c) 2014-2019. All rights reserved.
- */
+
 
 const NodeCache = require('node-cache')
 const async = require('async')
@@ -25,7 +13,7 @@ let cache
 
 global.env = process.env.NODE_ENV || 'production'
 
-function loadConfig () {
+function loadConfig() {
   nconf.file({
     file: path.join(__dirname, '/../../config.yml'),
     format: require('nconf-yaml')
@@ -52,7 +40,7 @@ truCache.init = function (callback) {
   })
 }
 
-function restartRefreshClock () {
+function restartRefreshClock() {
   if (refreshTimer) {
     clearInterval(refreshTimer)
   }
@@ -215,48 +203,48 @@ truCache.refreshCache = function (callback) {
   )
 }
 
-// Fork of Main
-;(function () {
-  process.on('message', function (message) {
-    if (message.name === 'cache:refresh') {
-      winston.debug('Refreshing Cache....')
-      const now = moment()
-      const timeSinceLast = Math.round(moment.duration(now.diff(lastUpdated)).asMinutes())
-      if (timeSinceLast < 5) {
-        const i = 5 - timeSinceLast
-        winston.debug('Cannot refresh cache for another ' + i + ' minutes')
-        return false
+  // Fork of Main
+  ; (function () {
+    process.on('message', function (message) {
+      if (message.name === 'cache:refresh') {
+        winston.debug('Refreshing Cache....')
+        const now = moment()
+        const timeSinceLast = Math.round(moment.duration(now.diff(lastUpdated)).asMinutes())
+        if (timeSinceLast < 5) {
+          const i = 5 - timeSinceLast
+          winston.debug('Cannot refresh cache for another ' + i + ' minutes')
+          return false
+        }
+
+        truCache.refreshCache(function () {
+          winston.debug('Cache Refreshed at ' + lastUpdated.format('hh:mm:ssa'))
+          restartRefreshClock()
+        })
       }
 
-      truCache.refreshCache(function () {
-        winston.debug('Cache Refreshed at ' + lastUpdated.format('hh:mm:ssa'))
-        restartRefreshClock()
-      })
-    }
+      if (message.name === 'cache:refresh:force') {
+        winston.debug('Forcing Refreshing Cache....')
 
-    if (message.name === 'cache:refresh:force') {
-      winston.debug('Forcing Refreshing Cache....')
-
-      truCache.refreshCache(function () {
-        winston.debug('Cache Refreshed at ' + lastUpdated.format('hh:mm:ssa'))
-        restartRefreshClock()
-      })
-    }
-  })
-
-  loadConfig()
-  const db = require('../database')
-  db.init(function (err) {
-    if (err) return winston.error(err)
-    truCache.init(function (err) {
-      if (err) {
-        winston.error(err)
-        throw new Error(err)
+        truCache.refreshCache(function () {
+          winston.debug('Cache Refreshed at ' + lastUpdated.format('hh:mm:ssa'))
+          restartRefreshClock()
+        })
       }
-
-      return process.exit(0)
     })
-  })
-})()
+
+    loadConfig()
+    const db = require('../database')
+    db.init(function (err) {
+      if (err) return winston.error(err)
+      truCache.init(function (err) {
+        if (err) {
+          winston.error(err)
+          throw new Error(err)
+        }
+
+        return process.exit(0)
+      })
+    })
+  })()
 
 module.exports = truCache

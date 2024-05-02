@@ -1,16 +1,4 @@
-/*
- *       .                             .o8                     oooo
- *    .o8                             "888                     `888
- *  .o888oo oooo d8b oooo  oooo   .oooo888   .ooooo.   .oooo.o  888  oooo
- *    888   `888""8P `888  `888  d88' `888  d88' `88b d88(  "8  888 .8P'
- *    888    888      888   888  888   888  888ooo888 `"Y88b.   888888.
- *    888 .  888      888   888  888   888  888    .o o.  )88b  888 `88b.
- *    "888" d888b     `V88V"V8P' `Y8bod88P" `Y8bod8P' 8""888P' o888o o888o
- *  ========================================================================
- *  Author:     Chris Brame
- *  Updated:    1/20/19 4:43 PM
- *  Copyright (c) 2014-2019. All rights reserved.
- */
+
 
 const _ = require('lodash')
 const async = require('async')
@@ -98,7 +86,7 @@ const init = function (tickets, callback) {
   )
 }
 
-function buildMostRequester (ticketArray, callback) {
+function buildMostRequester(ticketArray, callback) {
   let requesters = _.map(ticketArray, function (m) {
     if (m.owner) {
       return m.owner.fullname
@@ -125,13 +113,13 @@ function buildMostRequester (ticketArray, callback) {
   return callback(r)
 }
 
-function flatten (arr) {
+function flatten(arr) {
   return arr.reduce(function (flat, toFlatten) {
     return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten)
   }, [])
 }
 
-function buildMostComments (ticketArray, callback) {
+function buildMostComments(ticketArray, callback) {
   let commenters = _.map(ticketArray, function (m) {
     return _.map(m.comments, function (i) {
       return i.owner.fullname
@@ -157,7 +145,7 @@ function buildMostComments (ticketArray, callback) {
   return callback(c)
 }
 
-function buildMostAssignee (ticketArray, callback) {
+function buildMostAssignee(ticketArray, callback) {
   ticketArray = _.reject(ticketArray, function (v) {
     return _.isUndefined(v.assignee) || _.isNull(v.assignee)
   })
@@ -183,7 +171,7 @@ function buildMostAssignee (ticketArray, callback) {
   return callback(a)
 }
 
-function buildMostActiveTicket (ticketArray, callback) {
+function buildMostActiveTicket(ticketArray, callback) {
   let tickets = _.map(ticketArray, function (m) {
     return { uid: m.uid, cSize: _.size(m.history) }
   })

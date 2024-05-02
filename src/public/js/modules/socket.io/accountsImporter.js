@@ -1,32 +1,20 @@
-/*
- *       .                             .o8                     oooo
- *    .o8                             "888                     `888
- *  .o888oo oooo d8b oooo  oooo   .oooo888   .ooooo.   .oooo.o  888  oooo
- *    888   `888""8P `888  `888  d88' `888  d88' `88b d88(  "8  888 .8P'
- *    888    888      888   888  888   888  888ooo888 `"Y88b.   888888.
- *    888 .  888      888   888  888   888  888    .o o.  )88b  888 `88b.
- *    "888" d888b     `V88V"V8P' `Y8bod88P" `Y8bod8P' 8""888P' o888o o888o
- *  ========================================================================
- *  Author:     Chris Brame
- *  Updated:    1/20/19 4:43 PM
- *  Copyright (c) 2014-2019. All rights reserved.
- */
+
 
 define('modules/socket.io/accountsImporter', ['jquery', 'modules/helpers', 'history'], function ($, helpers) {
   var accountsImporter = {}
 
   var socket
 
-  function onStatusChange (type, item, percent) {
+  function onStatusChange(type, item, percent) {
     var $statusBox = $('#' + type + '-import-status-box > ul')
     if (item) {
       if (item.state === 1) {
         $statusBox.append(
           '<li><div data-import-username="' +
-            item.username +
-            '" style="display:flex;">Importing ' +
-            item.username +
-            '<span>...</span></div></li>'
+          item.username +
+          '" style="display:flex;">Importing ' +
+          item.username +
+          '<span>...</span></div></li>'
         )
       } else if (item.state === 2) {
         var span = $statusBox.find('div[data-import-username="' + item.username + '"] > span')
@@ -54,7 +42,7 @@ define('modules/socket.io/accountsImporter', ['jquery', 'modules/helpers', 'hist
       .css({ width: percent + '%' })
   }
 
-  function finishImport (type, completedCount) {
+  function finishImport(type, completedCount) {
     var $statusBox = $('#' + type + '-import-status-box')
     if (completedCount === 1) {
       $statusBox.find('ul').append('<li>Imported ' + completedCount + ' account</li>')
@@ -105,7 +93,7 @@ define('modules/socket.io/accountsImporter', ['jquery', 'modules/helpers', 'hist
     })
   }
 
-  function scrollStatusBox () {
+  function scrollStatusBox() {
     var e = $('#ldap-import-status-box')
     if (e.length > 0) {
       e = e[0]

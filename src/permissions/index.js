@@ -1,16 +1,4 @@
-/*
- *       .                             .o8                     oooo
- *    .o8                             "888                     `888
- *  .o888oo oooo d8b oooo  oooo   .oooo888   .ooooo.   .oooo.o  888  oooo
- *    888   `888""8P `888  `888  d88' `888  d88' `88b d88(  "8  888 .8P'
- *    888    888      888   888  888   888  888ooo888 `"Y88b.   888888.
- *    888 .  888      888   888  888   888  888    .o o.  )88b  888 `88b.
- *    "888" d888b     `V88V"V8P' `Y8bod88P" `Y8bod8P' 8""888P' o888o o888o
- *  ========================================================================
- *  Author:     Chris Brame
- *  Updated:    1/20/19 4:43 PM
- *  Copyright (c) 2014-2019. All rights reserved.
- */
+
 
 const _ = require('lodash')
 const winston = require('../logger')
@@ -122,7 +110,7 @@ const getRoles = function (action) {
   return rolesWithAction
 }
 
-function hasHierarchyEnabled (roleId) {
+function hasHierarchyEnabled(roleId) {
   const role = _.find(global.roles, function (o) {
     return o._id.toString() === roleId.toString()
   })
@@ -130,7 +118,7 @@ function hasHierarchyEnabled (roleId) {
   return role.hierarchy
 }
 
-function parseRoleHierarchy (roleId) {
+function parseRoleHierarchy(roleId) {
   const roleOrder = global.roleOrder.order
 
   const idx = _.findIndex(roleOrder, function (i) {
@@ -141,7 +129,7 @@ function parseRoleHierarchy (roleId) {
   return _.slice(roleOrder, idx)
 }
 
-function hasPermOverRole (ownRole, extRole) {
+function hasPermOverRole(ownRole, extRole) {
   const roles = parseRoleHierarchy(extRole)
 
   const i = _.find(roles, function (o) {
@@ -151,7 +139,7 @@ function hasPermOverRole (ownRole, extRole) {
   return !_.isUndefined(i)
 }
 
-function isAdmin (roleId, callback) {
+function isAdmin(roleId, callback) {
   roleSchema.get(roleId, function (err, role) {
     if (err) return callback(false)
 
@@ -159,7 +147,7 @@ function isAdmin (roleId, callback) {
   })
 }
 
-function isAdminSync (roleId) {
+function isAdminSync(roleId) {
   const roles = global.roles
   if (!roles) return false
   const role = _.find(roles, function (r) {
@@ -171,7 +159,7 @@ function isAdminSync (roleId) {
   return role.isAdmin
 }
 
-function buildGrants (obj) {
+function buildGrants(obj) {
   return _.map(obj, function (v, k) {
     return k + ':' + _.join(v, ' ')
   })

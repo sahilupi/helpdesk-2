@@ -1,16 +1,4 @@
-/*
- *       .                             .o8                     oooo
- *    .o8                             "888                     `888
- *  .o888oo oooo d8b oooo  oooo   .oooo888   .ooooo.   .oooo.o  888  oooo
- *    888   `888""8P `888  `888  d88' `888  d88' `88b d88(  "8  888 .8P'
- *    888    888      888   888  888   888  888ooo888 `"Y88b.   888888.
- *    888 .  888      888   888  888   888  888    .o o.  )88b  888 `88b.
- *    "888" d888b     `V88V"V8P' `Y8bod88P" `Y8bod8P' 8""888P' o888o o888o
- *  ========================================================================
- *  Author:     Chris Brame
- *  Updated:    1/20/19 4:43 PM
- *  Copyright (c) 2014-2019. All rights reserved.
- */
+
 
 const _ = require('lodash')
 const fs = require('fs-extra')
@@ -27,17 +15,17 @@ global.env = process.env.NODE_ENV || 'production'
 let CONNECTION_URI = null
 let databaseName = null
 
-function cleanup (callback) {
+function cleanup(callback) {
   const rimraf = require('rimraf')
   rimraf(path.join(__dirname, '../../restores/restore_*'), callback)
 }
 
-function cleanUploads (callback) {
+function cleanUploads(callback) {
   const rimraf = require('rimraf')
   rimraf(path.join(__dirname, '../../public/uploads/*'), callback)
 }
 
-function copyUploads (file, callback) {
+function copyUploads(file, callback) {
   async.parallel(
     [
       function (done) {
@@ -66,7 +54,7 @@ function copyUploads (file, callback) {
   )
 }
 
-function extractArchive (file, callback) {
+function extractArchive(file, callback) {
   const zip = new AdmZip(path.join(__dirname, '../../backups/', file))
   zip.extractAllTo(path.join(__dirname, '../../restores/restore_' + file + '/'), true)
 
@@ -75,11 +63,11 @@ function extractArchive (file, callback) {
   }
 }
 
-function cleanMongoDb (callback) {
+function cleanMongoDb(callback) {
   database.db.connection.db.dropDatabase(callback)
 }
 
-function runRestore (file, callback) {
+function runRestore(file, callback) {
   const platform = os.platform()
   winston.info('Starting Restore... (' + platform + ')')
 
@@ -122,7 +110,7 @@ function runRestore (file, callback) {
   })
 }
 
-;(function () {
+; (function () {
   CONNECTION_URI = process.env.MONGOURI
   if (!CONNECTION_URI) return process.send({ success: false, error: 'Invalid connection uri' })
 

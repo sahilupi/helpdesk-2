@@ -1,16 +1,4 @@
-/*
- *       .                             .o8                     oooo
- *    .o8                             "888                     `888
- *  .o888oo oooo d8b oooo  oooo   .oooo888   .ooooo.   .oooo.o  888  oooo
- *    888   `888""8P `888  `888  d88' `888  d88' `88b d88(  "8  888 .8P'
- *    888    888      888   888  888   888  888ooo888 `"Y88b.   888888.
- *    888 .  888      888   888  888   888  888    .o o.  )88b  888 `88b.
- *    "888" d888b     `V88V"V8P' `Y8bod88P" `Y8bod8P' 8""888P' o888o o888o
- *  ========================================================================
- *  Author:     Chris Brame
- *  Updated:    1/20/19 4:43 PM
- *  Copyright (c) 2014-2019. All rights reserved.
- */
+
 const _ = require('lodash')
 const async = require('async')
 const winston = require('../logger')
@@ -23,7 +11,7 @@ const socketEventConst = require('./socketEventConsts')
 
 const events = {}
 
-function register (socket) {
+function register(socket) {
   events.onSetUserOnlineStatus(socket)
   events.onUpdateUsers(socket)
   events.updateOnlineBubbles(socket)
@@ -41,7 +29,7 @@ function register (socket) {
   }
 }
 
-function eventLoop () {
+function eventLoop() {
   updateUsers()
   updateOnlineBubbles()
 }
@@ -86,7 +74,7 @@ events.onSetUserOnlineStatus = function (socket) {
   })
 }
 
-function updateUsers () {
+function updateUsers() {
   const sortedUserList = sharedUtils.sortByKeys(sharedVars.usersOnline)
   _.forEach(sortedUserList, function (v) {
     const user = v.user
@@ -162,7 +150,7 @@ function updateUsers () {
   // utils.sendToAllConnectedClients(io, 'updateUsers', sortedUserList)
 }
 
-function updateOnlineBubbles () {
+function updateOnlineBubbles() {
   const sortedUserList = _.fromPairs(
     _.sortBy(_.toPairs(sharedVars.usersOnline), function (o) {
       return o[0]
@@ -186,7 +174,7 @@ events.updateOnlineBubbles = function (socket) {
   })
 }
 
-async function updateConversationsNotifications (socket) {
+async function updateConversationsNotifications(socket) {
   if (socket && socket.request && socket.request.user) {
     const user = socket.request.user
     const Message = require('../models/chat/message')
@@ -256,7 +244,7 @@ events.updateConversationsNotifications = function (socket) {
   })
 }
 
-function spawnOpenChatWindows (socket) {
+function spawnOpenChatWindows(socket) {
   const loggedInAccountId = socket.request.user._id
   const userSchema = require('../models/user')
   const conversationSchema = require('../models/chat/conversation')
@@ -490,7 +478,7 @@ events.onChatStopTyping = function (socket) {
   })
 }
 
-function joinChatServer (socket) {
+function joinChatServer(socket) {
   const user = socket.request.user
   let exists = false
   if (sharedVars.usersOnline.hasOwnProperty(user.username.toLowerCase())) {
