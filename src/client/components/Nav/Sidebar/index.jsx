@@ -1,16 +1,4 @@
-/*
- *       .                             .o8                     oooo
- *    .o8                             "888                     `888
- *  .o888oo oooo d8b oooo  oooo   .oooo888   .ooooo.   .oooo.o  888  oooo
- *    888   `888""8P `888  `888  d88' `888  d88' `88b d88(  "8  888 .8P'
- *    888    888      888   888  888   888  888ooo888 `"Y88b.   888888.
- *    888 .  888      888   888  888   888  888    .o o.  )88b  888 `88b.
- *    "888" d888b     `V88V"V8P' `Y8bod88P" `Y8bod8P' 8""888P' o888o o888o
- *  ========================================================================
- *  Author:     Chris Brame
- *  Updated:    1/20/19 4:46 PM
- *  Copyright (c) 2014-2019. All rights reserved.
- */
+
 
 import React from 'react'
 import { connect } from 'react-redux'
@@ -25,11 +13,11 @@ import { updateNavChange } from 'actions/nav'
 import Helpers from 'lib/helpers'
 
 class Sidebar extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
   }
 
-  componentDidMount () {
+  componentDidMount() {
     // Helpers.UI.getPlugins((err, result) => {
     //   if (!err && result.plugins) {
     //     this.setState({ plugins: result.plugins })
@@ -41,12 +29,12 @@ class Sidebar extends React.Component {
     this.props.updateNavChange({ activeItem: sidebarRoute, activeSubItem: sidebarSubRoute })
   }
 
-  componentDidUpdate () {
+  componentDidUpdate() {
     Helpers.UI.initSidebar()
     Helpers.UI.bindExpand()
   }
 
-  renderPlugins () {
+  renderPlugins() {
     const { plugins, sessionUser, activeItem, activeSubItem } = this.state
     return (
       <SidebarItem
@@ -79,7 +67,7 @@ class Sidebar extends React.Component {
     )
   }
 
-  render () {
+  render() {
     const { activeItem, activeSubItem, sessionUser } = this.props
 
     return (
@@ -197,7 +185,7 @@ class Sidebar extends React.Component {
                 active={activeItem === 'departments'}
               />
             )}
-            {/* {sessionUser && Helpers.canUser('reports:view') && (
+            {sessionUser && Helpers.canUser('reports:view') && (
               <SidebarItem
                 text='Reports'
                 icon='assessment'
@@ -214,24 +202,24 @@ class Sidebar extends React.Component {
                     href='/reports/generate'
                     active={activeSubItem === 'reports-generate'}
                   />
-                   <NavSeparator /> 
-                   <SubmenuItem 
-                    text='Group Breakdown' 
-                    icon='supervisor_account'
-                    href='/reports/breakdown/group'
-                    active={activeSubItem === 'reports-breakdown-group'}
-                   /> 
-                   <SubmenuItem 
-                    text='User Breakdown'
-                    icon='perm_identity'
-                    href='/reports/breakdown/user'
-                  active={activeSubItem === 'reports-breakdown-user'} 
-                  /> 
+                  {/*<NavSeparator />*/}
+                  {/*<SubmenuItem*/}
+                  {/*  text='Group Breakdown'*/}
+                  {/*  icon='supervisor_account'*/}
+                  {/*  href='/reports/breakdown/group'*/}
+                  {/*  active={activeSubItem === 'reports-breakdown-group'}*/}
+                  {/*/>*/}
+                  {/*<SubmenuItem*/}
+                  {/*  text='User Breakdown'*/}
+                  {/*  icon='perm_identity'*/}
+                  {/*  href='/reports/breakdown/user'*/}
+                  {/*  active={activeSubItem === 'reports-breakdown-user'}*/}
+                  {/*/>*/}
                 </Submenu>
               </SidebarItem>
-            )} */}
+            )}
 
-            {/* {this.renderPlugins()} */}
+            {/*{this.renderPlugins()}*/}
 
             {sessionUser && Helpers.canUser('notices:view') && (
               <SidebarItem
@@ -328,7 +316,7 @@ class Sidebar extends React.Component {
             )}
             <NavSeparator />
             <SidebarItem href='/about' icon='help' text='About' active={activeItem === 'about'} />
-            {/* <SidebarItem href={'https://www.trudesk.io'} icon={'cloud'} text={'Cloud'} target={'_blank'} /> */}
+            {/*<SidebarItem href={'https://www.trudesk.io'} icon={'cloud'} text={'Cloud'} target={'_blank'} />*/}
           </ul>
         </div>
         <div className='side-nav-bottom-panel'>
