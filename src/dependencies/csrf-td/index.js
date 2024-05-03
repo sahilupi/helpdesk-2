@@ -1,13 +1,3 @@
-/*!
- * csurf
- * Copyright(c) 2011 Sencha Inc.
- * Copyright(c) 2014 Jonathan Ong
- * Copyright(c) 2014-2016 Douglas Christopher Wilson
- * MIT Licensed
- *
- * Modified for Trudesk by Chris Brame (2022)
- */
-
 'use strict'
 
 /**
@@ -65,7 +55,7 @@ csurf.init = function (options) {
   }
 }
 
-function generateSecret (req, res) {
+function generateSecret(req, res) {
   // get the secret from the request
   let secret = getSecret(req, sessionKey, cookie)
 
@@ -111,7 +101,7 @@ csurf.generateToken = function (req, res, next) {
   next()
 }
 
-csurf.middleware = function csrf (req, res, next) {
+csurf.middleware = function csrf(req, res, next) {
   // generate lookup
   const ignoreMethod = getIgnoredMethods(ignoreMethods)
 
@@ -143,7 +133,7 @@ csurf.middleware = function csrf (req, res, next) {
  * @api private
  */
 
-function defaultValue (req) {
+function defaultValue(req) {
   return (
     (req.body && req.body._csrf) ||
     (req.query && req.query._csrf) ||
@@ -162,7 +152,7 @@ function defaultValue (req) {
  * @api private
  */
 
-function getCookieOptions (options) {
+function getCookieOptions(options) {
   if (options !== true && typeof options !== 'object') {
     return undefined
   }
@@ -194,7 +184,7 @@ function getCookieOptions (options) {
  * @api private
  */
 
-function getIgnoredMethods (methods) {
+function getIgnoredMethods(methods) {
   const obj = Object.create(null)
 
   for (let i = 0; i < methods.length; i++) {
@@ -214,7 +204,7 @@ function getIgnoredMethods (methods) {
  * @api private
  */
 
-function getSecret (req, sessionKey, cookie) {
+function getSecret(req, sessionKey, cookie) {
   // get the bag & key
   const bag = getSecretBag(req, sessionKey, cookie)
   const key = cookie ? cookie.key : 'csrfSecret'
@@ -236,7 +226,7 @@ function getSecret (req, sessionKey, cookie) {
  * @api private
  */
 
-function getSecretBag (req, sessionKey, cookie) {
+function getSecretBag(req, sessionKey, cookie) {
   if (cookie) {
     // get secret from cookie
     const cookieKey = cookie.signed ? 'signedCookies' : 'cookies'
@@ -258,7 +248,7 @@ function getSecretBag (req, sessionKey, cookie) {
  * @api private
  */
 
-function setCookie (res, name, val, options) {
+function setCookie(res, name, val, options) {
   const data = Cookie.serialize(name, val, options)
 
   const prev = res.getHeader('set-cookie') || []
@@ -278,7 +268,7 @@ function setCookie (res, name, val, options) {
  * @api private
  */
 
-function setSecret (req, res, sessionKey, val, cookie) {
+function setSecret(req, res, sessionKey, val, cookie) {
   if (cookie) {
     // set secret on cookie
     let value = val
@@ -299,7 +289,7 @@ function setSecret (req, res, sessionKey, val, cookie) {
  * @private
  */
 
-function verifyConfiguration (req, sessionKey, cookie) {
+function verifyConfiguration(req, sessionKey, cookie) {
   if (!getSecretBag(req, sessionKey, cookie)) {
     return false
   }

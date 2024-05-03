@@ -576,7 +576,7 @@ userSchema.statics.createUserFromEmail = function (email, callback) {
               .then(function (html) {
                 var mailOptions = {
                   to: savedUser.email,
-                  subject: 'Welcome to trudesk! - Here are your account details.',
+                  subject: 'Welcome to Helpdesk! - Here are your account details.',
                   html: html,
                   generateTextFromHTML: true
                 }

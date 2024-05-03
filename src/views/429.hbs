@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>Trudesk</title>
+    <title>Helpdesk</title>
     <link href='http://fonts.googleapis.com/css?family=Roboto:200,400,300,600,700' rel='stylesheet' type='text/css'>
     <style type="text/css">
         html {
             overflow-x: hidden;
         }
+
         body {
             background: #eee;
             text-align: center;
@@ -82,21 +84,30 @@
             color: #A5A5A5;
         }
 
-        ::-webkit-input-placeholder { /* WebKit browsers */
-            color:    #444;
+        ::-webkit-input-placeholder {
+            /* WebKit browsers */
+            color: #444;
         }
-        :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-            color:    #444;
-            opacity:  1;
+
+        :-moz-placeholder {
+            /* Mozilla Firefox 4 to 18 */
+            color: #444;
+            opacity: 1;
         }
-        ::-moz-placeholder { /* Mozilla Firefox 19+ */
-            color:    #444;
-            opacity:  1;
+
+        ::-moz-placeholder {
+            /* Mozilla Firefox 19+ */
+            color: #444;
+            opacity: 1;
         }
-        :-ms-input-placeholder { /* Internet Explorer 10+ */
-            color:    #444;
+
+        :-ms-input-placeholder {
+            /* Internet Explorer 10+ */
+            color: #444;
         }
-        h2,h4 {
+
+        h2,
+        h4 {
             text-align: center;
             font-family: "Roboto", Arial, sans-serif;
             font-size: 150px;
@@ -104,17 +115,21 @@
             margin: 0;
             color: #666;
         }
+
         h4 {
             font-size: 32px;
             color: #666;
         }
     </style>
 </head>
+
 <body>
-<a href="/" ><img src="/img/td_3@2x.png" alt="Trudesk Logo" style="display: block; position: absolute; top: 15px; left: 15px; height: 75px" /></a>
-<div class="wrapper">
-    <h2>429</h2>
-    <h4>Too many requests. <br />Please wait. ({{timeout}})</h4>
-</div>
+    {{!-- <a href="/"><img src="/img/td_3@2x.png" alt="Helpdesk Logo"
+            style="display: block; position: absolute; top: 15px; left: 15px; height: 75px" /></a> --}}
+    <div class="wrapper">
+        <h2>429</h2>
+        <h4>Too many requests. <br />Please wait. ({{timeout}})</h4>
+    </div>
 </body>
+
 </html>
