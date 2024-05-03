@@ -1,3 +1,4 @@
+{{!--
 <!DOCTYPE html>
 <html>
 
@@ -249,7 +250,7 @@
             {{#if allowUserRegistration}}
             <hr>
             <a id="allowUserRegistration" href="/signup" class="no-ajaxy left">Create an Account.</a>
-            {{/if}}
+
             {{#if mailerEnabled}}
             <a id="forgotPass" href="#" class="no-ajaxy right" style="display: block; clear: right;">Forgot your
                 password?</a>
@@ -278,6 +279,366 @@
         {{bottom}}
     </div>
 
+    <script type="text/javascript">
+        window.truRequire(['jquery', 'helpers'], function (loadedModules) {
+            var $ = loadedModules[0];
+            var helpers = loadedModules[1];
+            helpers.UI.inputs();
+            helpers.UI.waves();
+
+            $('#loginForm').submit(function (e) {
+                var u = $('#login-username').val();
+                var p = $('#login-password').val();
+                if (u.length < 4 || p.length < 4)
+                    e.preventDefault();
+            });
+
+            $('#forgotPass').click(function (e) {
+                e.preventDefault();
+                $('.loginForm').fadeOut(100, function () {
+                    $('.forgotPassForm').fadeIn();
+                });
+
+            });
+
+            $('#backToLogin').click(function (e) {
+                e.preventDefault();
+                $('.forgotPassForm').fadeOut(100, function () {
+                    $('.loginForm').fadeIn();
+                })
+            });
+
+            $('#forgotPassForm').submit(function (e) {
+                e.preventDefault();
+                var self = $(this);
+                var alertMessage = $('.alert-message');
+                $.ajax({
+                    type: 'POST',
+                    url: '/forgotpass',
+                    data: self.serialize(),
+                    async: true,
+                    success: function (data) {
+                        alertMessage.removeClass('hide')
+                            .addClass('green')
+                            .find('p')
+                            .html('Password Reset Email Sent!');
+
+                        $('#forgotPass-email').val('');
+
+                        $('.forgotPassForm').fadeOut(100, function () {
+                            $('.loginForm').fadeIn();
+                        })
+                    },
+
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        alertMessage.removeClass('hide')
+                            .find('p')
+                            .html(xhr.responseText);
+                    }
+                });
+
+                return false;
+            });
+
+            $(document).ready(function () {
+                if (screen.width <= 800) {
+                    document.location = '/mobile';
+                }
+
+                setTimeout(function () {
+                    $('#login-username').focus();
+                }, 700);
+            });
+        });
+    </script>
+</body>
+
+</html> --}}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Design by foolishdeveloper.com -->
+    <title>{{{siteTitle}}} &middot; {{{title}}}</title>
+    <link rel="icon" href="/assets/favicon.png">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    {{!--
+    <link rel="stylesheet" href="/css/plugins.min.css">
+    <link rel="stylesheet" href="/css/app.min.css"> --}}
+
+    <style media="screen">
+        *,
+        *:before,
+        *:after {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            overflow-x: hidden;
+        }
+
+
+
+        .alert-message {
+            padding: 0;
+            position: fixed;
+            top: 50px;
+            left: 50%;
+            width: 380px;
+            height: 50px;
+            z-index: 10;
+
+            /*margin-bottom: 50px;*/
+            background: {
+                    {
+                    colorTertiary
+                }
+            }
+
+            ;
+            border-radius: 5px;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            transform: translate(-50%, 0);
+        }
+
+        .alert-message p {
+            margin-top: 8px;
+            margin-bottom: 0;
+            color: white;
+            font-weight: 300;
+            text-align: center;
+            font-size: 22px;
+        }
+
+
+        body {
+            background-color: #080710;
+        }
+
+        .background {
+            width: 430px;
+            height: 520px;
+            position: absolute;
+            transform: translate(-50%, -50%);
+            left: 50%;
+            top: 50%;
+        }
+
+        .background .shape {
+            height: 200px;
+            width: 200px;
+            position: absolute;
+            border-radius: 50%;
+        }
+
+        .shape:first-child {
+            background: linear-gradient(#1845ad,
+                    #23a2f6);
+            left: -80px;
+            top: -80px;
+        }
+
+        .shape:last-child {
+            background: linear-gradient(to right,
+                    #ff512f,
+                    #f09819);
+            right: -30px;
+            bottom: -80px;
+        }
+
+        form {
+            height: 520px;
+            width: 400px;
+            background-color: rgba(255, 255, 255, 0.13);
+            position: absolute;
+            transform: translate(-50%, -50%);
+            top: 50%;
+            left: 50%;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
+            padding: 50px 35px;
+        }
+
+        form * {
+            font-family: 'Poppins', sans-serif;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+            outline: none;
+            border: none;
+        }
+
+        form h3 {
+            font-size: 32px;
+            font-weight: 500;
+            line-height: 42px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        input {
+            display: block;
+            height: 50px;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.07);
+            border-radius: 3px;
+            padding: 0 10px;
+            margin-top: 8px;
+            font-size: 14px;
+            font-weight: 300;
+        }
+
+        ::placeholder {
+            color: #e5e5e5;
+        }
+
+        button {
+            margin-top: 50px;
+            width: 100%;
+            background-color: #ffffff;
+            color: #080710;
+            padding: 15px 0;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .social {
+            margin-top: 30px;
+            display: flex;
+        }
+
+        .social div {
+            background: red;
+            width: 150px;
+            border-radius: 3px;
+            padding: 5px 10px 10px 5px;
+            background-color: rgba(255, 255, 255, 0.27);
+            color: #eaf0fb;
+            text-align: center;
+        }
+
+        .social div:hover {
+            background-color: rgba(255, 255, 255, 0.47);
+        }
+
+        .social .fb {
+            margin-left: 25px;
+        }
+
+        .social i {
+            margin-right: 4px;
+        }
+
+        .login-img {
+            position: absolute;
+            top: 33%;
+            left: 81%;
+            transform: translate(-50%, -50%);
+            border-radius: 12px;
+        }
+
+        .login-img-2 {
+            max-width: 500px;
+            position: absolute;
+            top: 67%;
+            left: 3%;
+            transform: translate(0, -50%);
+            border-radius: 12px;
+        }
+
+        .no-ajaxy {
+            display: block;
+            text-align: center;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+
+        .bottom {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            font-size: 12px;
+            font-family: "Roboto", Arial, sans-serif;
+            margin: 0 0 5px 15px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/vendor.js"></script>
+    <script src="/js/truRequire.js"></script>
+    </style>
+</head>
+
+<body>
+    <div class="alert-message {{#if flash}} {{else}} hide {{/if}} {{#if flash.success}} green {{/if}}">
+        <p>{{#if flash.message}} {{{flash.message}}} {{else}} {{{flash}}}{{/if}}</p>
+    </div>
+    <div class="background">
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+    <img class="login-img" src="img/helpdesk-login.png" alt="login img helpdesk">
+    <img class="login-img-2" src="img/helpdesk-login-2.png" alt="login img helpdesk">
+    <div class="loginForm">
+
+
+        <form id="loginForm" method="post" action="/login" class="uk-form-stacked uk-clearfix">
+            <h3>Helpdesk Login</h3>
+
+            <label for="username">Username</label>
+            <input type="text" placeholder="Email or Phone" id="login-username" name="login-username">
+
+            <label for="password">Password</label>
+            <input type="password" placeholder="Password" id="login-password" name="login-password">
+
+            <button type="submit">Log In</button>
+            <div class="social">
+                {{#if allowUserRegistration}}
+                <div class="go"><a id="allowUserRegistration" href="/signup" style="text-decoration: none"> Create an
+                        Account</a></div>
+                {{/if}}
+
+                {{#if mailerEnabled}}
+                <div class="fb"><a id="forgotPass" href="#" class="no-ajaxy right" style="text-decoration: none">
+                        Forgot your password</a></div>
+                {{/if}}
+            </div>
+        </form>
+    </div>
+    {{#if mailerEnabled}}
+    <div class="forgotPassForm" style="display: none;">
+        <form id="forgotPassForm" method="post" action="/">
+            <div class="uk-margin-medium-bottom">
+                <label for="forgotPass-email">Email</label>
+                <input id="forgotPass-email" name="forgotPass-email" type="text" class="md-input" />
+            </div>
+            <!--<input id="login-password" name="login-password" type="password" placeholder="Password" />-->
+            <button class="btn no-ajaxy md-btn md-btn-flat md-btn-wave md-btn-flat-danger" type="submit">Forgot
+                Password</button>
+            <a id="backToLogin" href="#" class="no-ajaxy">Back to Login</a>
+        </form>
+
+    </div>
+    {{/if}}
+    <div class="bottom">
+        {{bottom}}
+    </div>
     <script type="text/javascript">
         window.truRequire(['jquery', 'helpers'], function (loadedModules) {
             var $ = loadedModules[0];
