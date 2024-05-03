@@ -1,5 +1,3 @@
-
-
 const async = require('async')
 const path = require('path')
 const _ = require('lodash')

@@ -1,5 +1,3 @@
-
-
 // var _               = require('lodash');
 var mongoose = require('mongoose')
 var moment = require('moment')

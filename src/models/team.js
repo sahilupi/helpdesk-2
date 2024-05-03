@@ -1,17 +1,3 @@
-/*
- *       .                             .o8                     oooo
- *    .o8                             "888                     `888
- *  .o888oo oooo d8b oooo  oooo   .oooo888   .ooooo.   .oooo.o  888  oooo
- *    888   `888""8P `888  `888  d88' `888  d88' `88b d88(  "8  888 .8P'
- *    888    888      888   888  888   888  888ooo888 `"Y88b.   888888.
- *    888 .  888      888   888  888   888  888    .o o.  )88b  888 `88b.
- *    "888" d888b     `V88V"V8P' `Y8bod88P" `Y8bod8P' 8""888P' o888o o888o
- *  ========================================================================
- *  Author:     Chris Brame
- *  Updated:    3/28/19 2:13 AM
- *  Copyright (c) 2014-2019. All rights reserved.
- */
-
 var _ = require('lodash')
 var mongoose = require('mongoose')
 var utils = require('../helpers/utils')
@@ -47,7 +33,7 @@ teamSchema.pre('save', function (next) {
 
 teamSchema.methods.addMember = async function (memberId, callback) {
   return new Promise((resolve, reject) => {
-    ;(async () => {
+    ; (async () => {
       if (_.isUndefined(memberId)) {
         if (typeof callback === 'function') return callback({ message: 'Invalid MemberId - TeamSchema.AddMember()' })
         return reject(new Error('Invalid MemberId - TeamSchema.AddMember()'))
@@ -67,14 +53,14 @@ teamSchema.methods.addMember = async function (memberId, callback) {
 
 teamSchema.methods.removeMember = function (memberId, callback) {
   return new Promise((resolve, reject) => {
-    ;(async () => {
+    ; (async () => {
       if (_.isUndefined(memberId)) {
         if (typeof callback === 'function') return callback({ message: 'Invalid MemberId - TeamSchema.RemoveMember()' })
         return reject(new Error('Invalid MemberId - TeamSchema.RemoveMember()'))
       }
 
       if (!isMember(this.members, memberId)) {
-        if(typeof callback === 'function') return callback(null, false)
+        if (typeof callback === 'function') return callback(null, false)
         return reject(false)
       }
       this.members.splice(_.indexOf(this.members, _.find(this.members, { _id: memberId })), 1)
@@ -136,7 +122,7 @@ teamSchema.statics.getTeamsNoPopulate = function (callback) {
 
 teamSchema.statics.getTeamsOfUser = function (userId, callback) {
   return new Promise((resolve, reject) => {
-    ;(async () => {
+    ; (async () => {
       if (_.isUndefined(userId)) {
         if (typeof callback === 'function') callback('Invalid UserId - TeamSchema.GetTeamsOfUser()')
         return reject(new Error('Invalid UserId - TeamSchema.GetTeamsOfUser()'))
@@ -179,7 +165,7 @@ teamSchema.statics.getTeam = function (id, callback) {
   return q.exec(callback)
 }
 
-function isMember (arr, id) {
+function isMember(arr, id) {
   var matches = _.filter(arr, function (value) {
     if (value._id.toString() === id.toString()) return value
   })

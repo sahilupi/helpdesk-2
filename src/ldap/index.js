@@ -1,5 +1,3 @@
-
-
 var _ = require('lodash')
 var ldap = require('ldapjs')
 

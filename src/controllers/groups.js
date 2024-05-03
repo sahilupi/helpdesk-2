@@ -1,5 +1,3 @@
-
-
 const async = require('async')
 const _ = require('lodash')
 const userSchema = require('../models/user')

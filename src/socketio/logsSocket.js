@@ -1,5 +1,3 @@
-
-
 var utils = require('../helpers/utils')
 var path = require('path')
 var AnsiUp = require('ansi_up')

@@ -1,5 +1,3 @@
-
-
 'use strict'
 
 const eventEmitter = new (require('events').EventEmitter)()

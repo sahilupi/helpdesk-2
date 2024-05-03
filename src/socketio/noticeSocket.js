@@ -1,5 +1,3 @@
-
-
 const winston = require('winston')
 const utils = require('../helpers/utils')
 const noticeSchema = require('../models/notice')

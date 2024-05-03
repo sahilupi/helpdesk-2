@@ -1,5 +1,3 @@
-
-
 const utils = require('../helpers/utils')
 const sharedVars = require('./index').shared
 const socketEvents = require('./socketEventConsts')

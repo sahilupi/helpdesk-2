@@ -1,5 +1,3 @@
-
-
 const passport = require('passport')
 const Local = require('passport-local').Strategy
 const TotpStrategy = require('passport-totp').Strategy

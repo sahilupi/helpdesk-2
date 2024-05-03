@@ -1,5 +1,3 @@
-
-
 const _ = require('lodash')
 const noticeSchema = require('../models/notice')
 const permissions = require('../permissions')

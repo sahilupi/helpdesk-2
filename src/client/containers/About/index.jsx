@@ -99,7 +99,7 @@ class AboutContainer extends React.Component {
             <div style={{ paddingLeft: 40 }}>
               <h6>Techtweek version {this.props.viewdata.get('version')}</h6>
               <p style={{ fontSize: '12px' }}>
-                Copyright &copy;2014-2022 Techtweek, Inc. (Chris Brame) <br /> <br />
+                Copyright &copy;2021-{new Date().getFullYear()} Techtweek <br /> <br />
                 {/* <a href='https://docs.trudesk.io/v1.2/' className='no-ajaxy' rel={'noreferrer'} target='_blank'>
                   General Documentation
                 </a>
@@ -132,7 +132,7 @@ class AboutContainer extends React.Component {
                 or implied. See the License for the specific language governing permissions and limitations under the
                 License.
               </p>
-              <p style={{ color: '#55616e', fontSize: '12px' }}>
+              {/* <p style={{ color: '#55616e', fontSize: '12px' }}>
                 Please support the project by donating. A simple cup of coffee or a good dinner goes a long way.
                 <a
                   href='https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=USPWFP6P6RTKC'
@@ -141,7 +141,7 @@ class AboutContainer extends React.Component {
                 >
                   Donate
                 </a>
-              </p>
+              </p> */}
               <hr style={{ width: '100%', height: 1 }} className='bg-accent' />
               <p style={{ color: '#55616e', fontSize: '12px', marginBottom: 5 }}>
                 This software uses the following third party plugins:

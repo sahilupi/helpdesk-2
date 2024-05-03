@@ -1,5 +1,3 @@
-
-
 const database = require('../database')
 
 global.env = process.env.NODE_ENV || 'production'

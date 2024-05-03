@@ -1,5 +1,3 @@
-
-
 var winston = require('winston')
 var request = require('request')
 

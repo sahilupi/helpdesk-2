@@ -1,5 +1,3 @@
-
-
 const _ = require('lodash')
 const xss = require('xss')
 const fs = require('fs')

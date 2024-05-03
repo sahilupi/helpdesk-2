@@ -1,5 +1,3 @@
-
-
 const nconf = require('nconf')
 const mongoose = require('mongoose')
 const winston = require('../logger')

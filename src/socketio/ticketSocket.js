@@ -1,4 +1,3 @@
-
 var _ = require('lodash')
 var async = require('async')
 var winston = require('../logger')

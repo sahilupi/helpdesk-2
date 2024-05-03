@@ -1,17 +1,3 @@
-/*
- *       .                             .o8                     oooo
- *    .o8                             "888                     `888
- *  .o888oo oooo d8b oooo  oooo   .oooo888   .ooooo.   .oooo.o  888  oooo
- *    888   `888""8P `888  `888  d88' `888  d88' `88b d88(  "8  888 .8P'
- *    888    888      888   888  888   888  888ooo888 `"Y88b.   888888.
- *    888 .  888      888   888  888   888  888    .o o.  )88b  888 `88b.
- *    "888" d888b     `V88V"V8P' `Y8bod88P" `Y8bod8P' 8""888P' o888o o888o
- *  ========================================================================
- *  Author:     Chris Brame
- *  Updated:    2/22/19 11:18 PM
- *  Copyright (c) 2014-2019. All rights reserved.
- */
-
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
@@ -97,7 +83,7 @@ class AccountsContainer extends React.Component {
       if (search.length > 2) {
         this.props.unloadAccounts().then(() => {
           this.hasMore = false
-          this.props.fetchAccounts({ limit: -1, search: search }).then(({ response }) => {
+          this.props.fetchAccounts({ limit: -1, search }).then(({ response }) => {
             this.pageStart = -1
             this.hasMore = response.count >= 25
           })
@@ -116,7 +102,7 @@ class AccountsContainer extends React.Component {
       this.props.accountsState.accounts &&
       this.props.accountsState.accounts.map(user => {
         const userImage = user.get('image') || 'defaultProfile.jpg'
-        let actionMenu = [<DropdownItem key={0} text={'Edit'} onClick={e => this.onEditAccountClicked(e, user)} />]
+        const actionMenu = [<DropdownItem key={0} text={'Edit'} onClick={e => this.onEditAccountClicked(e, user)} />]
         if (user.get('deleted'))
           actionMenu.push(<DropdownItem key={2} text={'Enable'} onClick={e => this.onEnableAccountClicked(e, user)} />)
         else
@@ -224,13 +210,13 @@ class AccountsContainer extends React.Component {
           title={this.props.title}
           rightComponent={
             <div className={'uk-grid uk-grid-collapse'}>
-              {/*<div className={'uk-width-3-4 pr-10'}>*/}
-              {/*  <div className='md-input-wrapper' style={{ marginTop: '10px' }}>*/}
-              {/*    <label className={'uk-form-label'}>Find Account</label>*/}
-              {/*    <input type='text' className={'md-input uk-margin-remove'} onKeyUp={e => this.onSearchKeyUp(e)} />*/}
-              {/*    <div className='md-input-bar' />*/}
-              {/*  </div>*/}
-              {/*</div>*/}
+              {/* <div className={'uk-width-3-4 pr-10'}> */}
+              {/*  <div className='md-input-wrapper' style={{ marginTop: '10px' }}> */}
+              {/*    <label className={'uk-form-label'}>Find Account</label> */}
+              {/*    <input type='text' className={'md-input uk-margin-remove'} onKeyUp={e => this.onSearchKeyUp(e)} /> */}
+              {/*    <div className='md-input-bar' /> */}
+              {/*  </div> */}
+              {/* </div> */}
               <div className={'uk-width-1-4 mt-15 pr-20 uk-clearfix'}>
                 <ButtonGroup classNames={'uk-clearfix uk-float-right'}>
                   <Button
@@ -242,22 +228,22 @@ class AccountsContainer extends React.Component {
                     extraClass={'hover-accent'}
                     onClick={() => this.props.showModal('CREATE_ACCOUNT')}
                   />
-                  {/*{helpers.canUser('accounts:import', true) && (*/}
-                  {/*  <DropdownTrigger mode={'click'} pos={'bottom-right'} offset={5} extraClass={'uk-float-right'}>*/}
-                  {/*    <Button*/}
-                  {/*      text={''}*/}
-                  {/*      hasDropdown={true}*/}
-                  {/*      small={true}*/}
-                  {/*      waves={false}*/}
-                  {/*      styleOverride={{ padding: '0 5px 0 0' }}*/}
-                  {/*      extraClass={'pr-5 no-border-radius nbl bg-accent md-color-white hover-accent'}*/}
-                  {/*    />*/}
-                  {/*    <Dropdown small={true}>*/}
-                  {/*      <DropdownHeader text={'Account Actions'} />*/}
-                  {/*      <DropdownItem text={'Import'} href={'/accounts/import'} />*/}
-                  {/*    </Dropdown>*/}
-                  {/*  </DropdownTrigger>*/}
-                  {/*)}*/}
+                  {/* {helpers.canUser('accounts:import', true) && ( */}
+                  {/*  <DropdownTrigger mode={'click'} pos={'bottom-right'} offset={5} extraClass={'uk-float-right'}> */}
+                  {/*    <Button */}
+                  {/*      text={''} */}
+                  {/*      hasDropdown={true} */}
+                  {/*      small={true} */}
+                  {/*      waves={false} */}
+                  {/*      styleOverride={{ padding: '0 5px 0 0' }} */}
+                  {/*      extraClass={'pr-5 no-border-radius nbl bg-accent md-color-white hover-accent'} */}
+                  {/*    /> */}
+                  {/*    <Dropdown small={true}> */}
+                  {/*      <DropdownHeader text={'Account Actions'} /> */}
+                  {/*      <DropdownItem text={'Import'} href={'/accounts/import'} /> */}
+                  {/*    </Dropdown> */}
+                  {/*  </DropdownTrigger> */}
+                  {/* )} */}
                 </ButtonGroup>
               </div>
             </div>

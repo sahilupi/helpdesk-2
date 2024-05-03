@@ -1,5 +1,3 @@
-
-
 const Controllers = {
   install: require('./install'),
   main: require('./main'),

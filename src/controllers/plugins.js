@@ -1,5 +1,3 @@
-
-
 const pluginsController = {}
 
 pluginsController.get = function (req, res) {

@@ -1,5 +1,3 @@
-
-
 const pluginHelpers = {}
 
 pluginHelpers.checkPermissions = function (userRole, permissions) {

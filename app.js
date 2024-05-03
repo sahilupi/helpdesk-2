@@ -207,7 +207,7 @@ function launchServer(db) {
         if (err) throw new Error(err)
 
         ws.listen(function () {
-          winston.info('helpdesk Ready')
+          winston.info('Helpdesk Ready')
         })
       }
     )
