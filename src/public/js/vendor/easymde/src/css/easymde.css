@@ -243,8 +243,8 @@
     display: block
 }
 
-.editor-preview > p,
-.editor-preview-side > p {
+.editor-preview>p,
+.editor-preview-side>p {
     margin-top: 0
 }
 

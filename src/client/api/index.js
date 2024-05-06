@@ -197,6 +197,12 @@ api.tickets.fetchTicketTypes = () => {
   })
 }
 
+api.tickets.getSuggestions = (comment) => {
+  return axios.get(`/api/v2/tickets/get-suggestions?comment=${comment}`).then(res => {
+    return res.data
+  })
+}
+
 api.accounts = {}
 api.accounts.create = payload => {
   return axios.post('/api/v2/accounts', payload).then(res => {

@@ -1,16 +1,3 @@
-/*
- *       .                             .o8                     oooo
- *    .o8                             "888                     `888
- *  .o888oo oooo d8b oooo  oooo   .oooo888   .ooooo.   .oooo.o  888  oooo
- *    888   `888""8P `888  `888  d88' `888  d88' `88b d88(  "8  888 .8P'
- *    888    888      888   888  888   888  888ooo888 `"Y88b.   888888.
- *    888 .  888      888   888  888   888  888    .o o.  )88b  888 `88b.
- *    "888" d888b     `V88V"V8P' `Y8bod88P" `Y8bod8P' 8""888P' o888o o888o
- *  ========================================================================
- *  Updated:    6/21/19 9:32 AM
- *  Copyright (c) 2014-2019 Trudesk, Inc. All rights reserved.
- */
-
 import React, { Fragment, createRef } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
@@ -18,8 +5,9 @@ import { observable, computed, makeObservable } from 'mobx'
 import { observer } from 'mobx-react'
 import sortBy from 'lodash/sortBy'
 import union from 'lodash/union'
+import ReactHtmlParser from 'react-html-parser'
 
-import { transferToThirdParty, fetchTicketTypes, fetchTicketStatus } from 'actions/tickets'
+import { transferToThirdParty, fetchTicketTypes, fetchTicketStatus, getSuggestions } from 'actions/tickets'
 import { fetchGroups, unloadGroups } from 'actions/groups'
 import { showModal } from 'actions/common'
 
@@ -79,6 +67,21 @@ const fetchTicket = parent => {
     })
 }
 
+const fetchCommenntSuggestion = async (parent, comment) => {
+  try {
+    const res = await axios
+    .get(`/api/v2/tickets/get-suggestions?comment=${comment}`);
+    if(res && res.data && res.data.suggestion) {
+      parent.suggestion = res.data.suggestion;
+    }
+  } catch (error) {
+    if (error.response.status === 403) {
+      History.pushState(null, null, '/tickets')
+    }
+    Log.error(error)
+  }
+}
+
 const showPriorityConfirm = () => {
   UIkit.modal.confirm(
     'Selected Priority does not exist for this ticket type. Priority has reset to the default for this type.' +
@@ -91,6 +94,7 @@ const showPriorityConfirm = () => {
 @observer
 class SingleTicketContainer extends React.Component {
   @observable ticket = null
+  @observable suggestion = null
   @observable isSubscribed = false
   assigneeDropdownPartial = createRef()
 
@@ -144,8 +148,17 @@ class SingleTicketContainer extends React.Component {
 
     fetchTicket(this)
     this.props.fetchTicketTypes()
+    
     this.props.fetchGroups()
     this.props.fetchTicketStatus()
+    setTimeout(async () => {
+      const lastComment = this.ticket?.comments[this.ticket?.comments.length - 1].comment;
+      // const parsedComment = ReactHtmlParser(lastComment);
+      const parsedComment = lastComment.replace(/<[^>]*>/g, '');
+      // this.props.getSuggestions(parsedComment);
+      await fetchCommenntSuggestion(this, parsedComment);
+      console.log(this.suggestion)
+    }, 5000);
   }
 
   componentDidUpdate () {
@@ -258,6 +271,10 @@ class SingleTicketContainer extends React.Component {
 
   transferToThirdParty (e) {
     this.props.transferToThirdParty({ uid: this.ticket.uid })
+  }
+
+  onFetchSuggestions () {
+    console.log('focused in editor')
   }
 
   render () {
@@ -669,7 +686,7 @@ class SingleTicketContainer extends React.Component {
                             />
                           )}
                         </TruTabSelectors>
-
+                          
                         {/* Tab Sections */}
                         <TruTabSection sectionId={0} active={true}>
                           <div className='all-comments'>
@@ -708,6 +725,7 @@ class SingleTicketContainer extends React.Component {
                             ))}
                           </div>
                         </TruTabSection>
+                        
                         <TruTabSection sectionId={1}>
                           <div className='comments'>
                             {this.ticket &&
@@ -809,11 +827,13 @@ class SingleTicketContainer extends React.Component {
                               style={{ paddingTop: 0 }}
                               active={helpers.canUser('comments:create', true)}
                             >
-                              <form onSubmit={e => this.onCommentNoteSubmit(e, 'comment')}>
+                              <form style={{position: 'relative'}} onSubmit={e => this.onCommentNoteSubmit(e, 'comment')}>
                                 <EasyMDE
                                   allowImageUpload={true}
                                   inlineImageUploadUrl={'/tickets/uploadmdeimage'}
                                   inlineImageUploadHeaders={{ ticketid: this.ticket._id }}
+                                  focus={this.onFetchSuggestions}
+                                  suggestion={this.suggestion}
                                   ref={r => (this.commentMDE = r)}
                                 />
                                 <div className='uk-width-1-1 uk-clearfix' style={{ marginTop: 50 }}>
@@ -878,6 +898,7 @@ SingleTicketContainer.propTypes = {
   common: PropTypes.object.isRequired,
   ticketTypes: PropTypes.object.isRequired,
   fetchTicketTypes: PropTypes.func.isRequired,
+  getSuggestions: PropTypes.func.isRequired,
   groupsState: PropTypes.object.isRequired,
   fetchGroups: PropTypes.func.isRequired,
   unloadGroups: PropTypes.func.isRequired,
@@ -899,6 +920,7 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps, {
   fetchTicketTypes,
+  getSuggestions,
   fetchGroups,
   fetchTicketStatus,
   unloadGroups,

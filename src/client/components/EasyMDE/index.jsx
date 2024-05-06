@@ -1,17 +1,3 @@
-/*
- *       .                             .o8                     oooo
- *    .o8                             "888                     `888
- *  .o888oo oooo d8b oooo  oooo   .oooo888   .ooooo.   .oooo.o  888  oooo
- *    888   `888""8P `888  `888  d88' `888  d88' `88b d88(  "8  888 .8P'
- *    888    888      888   888  888   888  888ooo888 `"Y88b.   888888.
- *    888 .  888      888   888  888   888  888    .o o.  )88b  888 `88b.
- *    "888" d888b     `V88V"V8P' `Y8bod88P" `Y8bod8P' 8""888P' o888o o888o
- *  ========================================================================
- *  Author:     Chris Brame
- *  Updated:    2/9/19 1:38 AM
- *  Copyright (c) 2014-2019. All rights reserved.
- */
-
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 
@@ -33,7 +19,9 @@ class EasyMDE extends React.Component {
     super(props)
     this.state = {
       value: '',
-      loaded: false
+      loaded: false,
+      showSuggestion: false,
+      suggestion: this.props.suggestion
     }
   }
 
@@ -46,10 +34,37 @@ class EasyMDE extends React.Component {
       autoDownloadFontAwesome: false,
       status: false,
       spellChecker: false
-    })
+    });
+    setTimeout(() => {
+      this.setState({
+        ...this.state,
+        suggestion: this.props.suggestion
+      });
+    }, 5500);
+    
 
     this.easymde.codemirror.on('change', () => {
-      this.onTextareaChanged(this.easymde.value())
+      
+      this.onTextareaChanged(this.easymde.value());
+      this.setState({
+        ...this.state,
+        showSuggestion: false
+      });
+    })
+
+    this.easymde.codemirror.on('focus', () => {
+      this.setState({
+        ...this.state,
+        showSuggestion: true
+      });
+    })
+    this.easymde.codemirror.on('blur', () => {
+      setTimeout(() => {
+        this.setState({
+          ...this.state,
+          showSuggestion: false
+        });
+      }, 1000);
     })
 
     if (this.easymde && this.props.allowImageUpload) {
@@ -134,7 +149,16 @@ class EasyMDE extends React.Component {
   onTextareaChanged (value) {
     this.setState({
       value
-    })
+    });
+    if(!value || value === '') {
+      this.setState({
+        ...this.state,
+        value: '',
+        suggestion: this.props.suggestion,
+        showSuggestion: true
+      });
+    }
+   
 
     if (this.props.onChange) this.props.onChange(value)
   }
@@ -147,6 +171,14 @@ class EasyMDE extends React.Component {
     this.setState({
       value: toMarkdown(value)
     })
+  }
+
+  onSelectSuggestion (suggestion) {
+    this.setState({
+      ...this.state,
+      value: suggestion,
+      suggestion: ''
+    });
   }
 
   static getMdeToolbarItems () {
@@ -219,6 +251,26 @@ class EasyMDE extends React.Component {
       <Fragment>
         <textarea ref={i => (this.element = i)} value={this.state.value} onChange={e => this.onTextareaChanged(e)} />
         {this.props.showStatusBar && <div className='editor-statusbar uk-float-left uk-width-1-1' />}
+        {/* {
+          (this.state.suggestion && this.state.showSuggestion) ? 
+          <div className='comment-suggestion' role='button' onClick={() => this.onSelectSuggestion(this.state.suggestion)} style={{
+            position: 'absolute',
+            top: '100px',
+            'z-index': '10',
+            left: '20px',
+            'box-shadow': '0px 2px 5px 0px grey',
+            padding: '3px',
+            'border-radius': '8px',
+            cursor: 'pointer',
+            'maxWidth': '95%'
+        }}
+        >
+          <pre>
+            {this.state.suggestion}
+          </pre>
+        </div>: null
+        } */}
+        
       </Fragment>
     )
   }
@@ -232,7 +284,9 @@ EasyMDE.propTypes = {
   allowImageUpload: PropTypes.bool,
   inlineImageUploadUrl: PropTypes.string,
   inlineImageUploadHeaders: PropTypes.object,
-  showStatusBar: PropTypes.bool.isRequired
+  showStatusBar: PropTypes.bool.isRequired,
+  focus: PropTypes.func,
+  suggestion: PropTypes.string,
 }
 
 EasyMDE.defaultProps = {

@@ -1203,7 +1203,6 @@ apiUsers.getGroups = function (req, res) {
     const departmentSchema = require('../../../models/department')
     departmentSchema.getDepartmentGroupsOfUser(req.user._id, function (err, groups) {
       if (err) return res.status(400).json({ success: false, error: err.message })
-
       const mappedGroups = groups.map(function (g) {
         return g._id
       })

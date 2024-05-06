@@ -237,6 +237,27 @@ ticketsV2.transferToThirdParty = async (req, res) => {
   }
 }
 
+ticketsV2.getReplySuggestions = async (req, res) => {
+  const query = req.query.comment || 'Hello'
+  const OpenAI = require('openai');
+  const openai = new OpenAI({
+    apiKey: process.env.OPEN_AI_SK
+  });
+
+  try {
+    const completion = await openai.chat.completions.create({
+      messages: [
+        { "role": "user", "content": query }],
+      model: "gpt-3.5-turbo",
+    });
+
+    console.log(completion.choices[0].message.content);
+    return apiUtils.sendApiSuccess(res, { suggestion: completion.choices[0].message.content })
+  } catch (error) {
+    return apiUtils.sendApiError(res, 500, error.message)
+  }
+}
+
 ticketsV2.info = {}
 ticketsV2.info.types = async (req, res) => {
   try {

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { fetchGroups, unloadGroups } from 'actions/groups'
-import { fetchTicketTypes } from 'actions/tickets'
+import { fetchTicketTypes, getSuggestions } from 'actions/tickets'
 import { generateReport } from 'actions/reports'
 
 import TruCard from 'components/TruCard'
@@ -37,6 +37,7 @@ const ReportTicketsByTypes = () => {
 
     dispatch(fetchGroups())
     dispatch(fetchTicketTypes())
+    dispatch(getSuggestions())
 
     setStartDate(
       moment()
