@@ -282,4 +282,4 @@ ticketsV2.info.tags = async (req, res) => {
   }
 }
 
-module.exports = ticketsV2
+module.exports = ticketsV2;

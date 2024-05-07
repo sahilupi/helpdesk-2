@@ -107,6 +107,61 @@ accountsApi.create = async function (req, res) {
       })
     }
 
+    // send mail
+
+    const path = require('path')
+    const mailer = require('../../../mailer')
+    const Email = require('email-templates')
+    const templateDir = path.resolve(__dirname, '../../../', 'mailer', 'templates')
+
+    const email = new Email({
+      views: {
+        root: templateDir,
+        options: {
+          extension: 'handlebars'
+        }
+      }
+    })
+
+    const settingSchema = require('../../../models/setting')
+    settingSchema.getSetting('gen:siteurl', function (err, setting) {
+      if (err) console.log(err)
+
+      if (!setting) {
+        setting = { value: '' }
+      }
+
+      const dataObject = {
+        user: postData,
+        username: postData.username,
+        fullname: postData.fullname,
+        plainTextPassword: postData.password,
+        baseUrl: setting.value
+      }
+
+      email
+        .render('public-account-created', dataObject)
+        .then(function (html) {
+          const mailOptions = {
+            to: postData.email,
+            subject: 'Welcome to Helpdesk! - Here are your account details.',
+            html,
+            generateTextFromHTML: true
+          }
+
+          mailer.sendMail(mailOptions, function (err) {
+            if (err) {
+              winston.warn(err)
+              return apiUtil.sendApiError_InvalidPostData(res)
+            }
+            console.log('success: Mail sent')
+            // return callback(null, { user: savedUser, group: group })
+          })
+        })
+    })
+
+    // 
+
     return apiUtil.sendApiSuccess(res, { account: user })
   } catch (e) {
     winston.warn(e)
@@ -199,11 +254,11 @@ accountsApi.get = function (req, res) {
       User.getAdmins(obj, function (err, accounts) {
         if (err) return apiUtil.sendApiError(res, 500, err.message)
 
-        var resAccounts = []
+        const resAccounts = []
         async.eachSeries(
           accounts,
           function (account, next) {
-            var a = account.toObject()
+            const a = account.toObject()
             Department.getUserDepartments(account._id, function (err, departments) {
               if (err) return next(err)
 

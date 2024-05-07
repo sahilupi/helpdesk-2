@@ -111,9 +111,16 @@ class EasyMDE extends React.Component {
     }
   }
 
-  componentDidUpdate () {
+  componentDidUpdate (prevProps) {
     if (this.easymde && this.easymde.value() !== this.state.value) {
       this.easymde.value(this.state.value)
+    }
+    if (this.props.suggestion !== prevProps.suggestion) {
+      // Update the state only if suggestion prop has changed
+      this.setState({
+        ...this.state,
+        suggestion: this.props.suggestion
+      });
     }
   }
 
@@ -251,7 +258,7 @@ class EasyMDE extends React.Component {
       <Fragment>
         <textarea ref={i => (this.element = i)} value={this.state.value} onChange={e => this.onTextareaChanged(e)} />
         {this.props.showStatusBar && <div className='editor-statusbar uk-float-left uk-width-1-1' />}
-        {/* {
+        {
           (this.state.suggestion && this.state.showSuggestion) ? 
           <div className='comment-suggestion' role='button' onClick={() => this.onSelectSuggestion(this.state.suggestion)} style={{
             position: 'absolute',
@@ -269,7 +276,7 @@ class EasyMDE extends React.Component {
             {this.state.suggestion}
           </pre>
         </div>: null
-        } */}
+        }
         
       </Fragment>
     )

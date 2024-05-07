@@ -231,7 +231,7 @@ class SingleTicketContainer extends React.Component {
         ticketid: isNote && this.ticket._id,
         note: isNote && this.noteMDE.getEditorText()
       })
-      .then(res => {
+      .then(async (res) => {
         if (res && res.data && res.data.success) {
           if (isNote) {
             this.ticket.notes = res.data.ticket.notes
@@ -239,6 +239,12 @@ class SingleTicketContainer extends React.Component {
           } else {
             this.ticket.comments = res.data.ticket.comments
             this.commentMDE.setEditorText('')
+            const lastComment = this.ticket?.comments[this.ticket?.comments.length - 1].comment;
+      // const parsedComment = ReactHtmlParser(lastComment);
+            const parsedComment = lastComment.replace(/<[^>]*>/g, '');
+            // this.props.getSuggestions(parsedComment);
+            await fetchCommenntSuggestion(this, parsedComment);
+            console.log(this.suggestion)
           }
 
           helpers.scrollToBottom('.page-content-right', true)
@@ -860,6 +866,7 @@ class SingleTicketContainer extends React.Component {
                                   inlineImageUploadUrl={'/tickets/uploadmdeimage'}
                                   inlineImageUploadHeaders={{ ticketid: this.ticket._id }}
                                   ref={r => (this.noteMDE = r)}
+                                  suggestion={this.suggestion}
                                 />
                                 <div className='uk-width-1-1 uk-clearfix' style={{ marginTop: 50 }}>
                                   <div className='uk-float-right'>
