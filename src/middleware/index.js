@@ -23,7 +23,7 @@ module.exports = function (app, db, callback) {
   middleware = require('./middleware')(app)
   app.disable('x-powered-by')
 
-  app.set('views', path.join(__dirname, '../views/'))
+  app.set('views', path.join(__dirname, '../views/'));
 
   app.engine(
     'hbs',
@@ -32,15 +32,15 @@ module.exports = function (app, db, callback) {
       defaultLayout: path.join(__dirname, '../views/layout/main.hbs'),
       partialsDir: [path.join(__dirname, '../views/partials/'), path.join(__dirname, '../views/subviews/reports')]
     })
-  )
-  app.set('view engine', 'hbs')
-  hbsHelpers.register(hbs.handlebars)
+  );
+  app.set('view engine', 'hbs');
+  hbsHelpers.register(hbs.handlebars);
   // Required to access handlebars in mail templates
-  global.Handlebars = hbs.handlebars
+  global.Handlebars = hbs.handlebars;
 
-  app.use(bodyParser.urlencoded({ limit: '2mb', extended: false }))
-  app.use(bodyParser.json({ limit: '2mb' }))
-  app.use(cookieParser())
+  app.use(bodyParser.urlencoded({ limit: '2mb', extended: false }));
+  app.use(bodyParser.json({ limit: '2mb' }));
+  app.use(cookieParser());
 
   if (global.env === 'production') {
     app.use(
@@ -48,7 +48,7 @@ module.exports = function (app, db, callback) {
         index: false
       })
     )
-  } else app.use(express.static(path.join(__dirname, '../../public')))
+  } else app.use(express.static(path.join(__dirname, '../../public')));
 
   app.use(function (req, res, next) {
     if (mongoose.connection.readyState !== 1) {
@@ -59,12 +59,12 @@ module.exports = function (app, db, callback) {
     }
 
     return next()
-  })
+  });
 
   const cookie = {
     httpOnly: true,
     maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year
-  }
+  };
 
   const sessionSecret = nconf.get('tokens:secret') ? nconf.get('tokens:secret') : 'trudesk$1234#SessionKeY!2288'
 
@@ -156,10 +156,10 @@ module.exports = function (app, db, callback) {
     function (err, s) {
       if (err) {
         winston.error(err)
-        throw new Error(err)
+        throw new Error(err);
       }
 
-      callback(middleware, s)
+      callback(middleware, s);
     }
   )
 }
@@ -176,6 +176,6 @@ function allowCrossDomain(req, res, next) {
   if (req.method === 'OPTIONS') {
     res.sendStatus(200)
   } else {
-    next()
+    next();
   }
 }

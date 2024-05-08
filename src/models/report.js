@@ -1,7 +1,7 @@
-var mongoose = require('mongoose')
-var _ = require('lodash')
+const mongoose = require('mongoose')
+const _ = require('lodash')
 
-var COLLECTION = 'reports'
+const COLLECTION = 'reports'
 
 /**
  * @since 1.0
@@ -20,7 +20,7 @@ var COLLECTION = 'reports'
  * @property {Number} status ```Required``` [default:0] Status of report.
  * @property {Array} data ```Required``` Data for the given report. *Based on report type*
  */
-var reportSchema = mongoose.Schema({
+const reportSchema = mongoose.Schema({
   uid: { type: Number, required: true, unique: true },
   name: { type: String, required: true },
   type: { type: Number, required: true },
@@ -32,15 +32,15 @@ var reportSchema = mongoose.Schema({
 reportSchema.pre('save', function (next) {
   if (!_.isUndefined(this.uid) || this.uid) return next()
 
-  var c = require('./counters')
-  var self = this
+  const c = require('./counters')
+  const self = this
   c.increment('reports', function (err, res) {
     if (err) return next(err)
 
     self.uid = res.value.next
 
     if (_.isUndefined(self.uid)) {
-      var error = new Error('Invalid UID.')
+      const error = new Error('Invalid UID.')
       return next(error)
     }
 
@@ -94,7 +94,7 @@ reportSchema.statics.getReportByType = function (type, callback) {
     return callback('Invalid Report Type - ReportSchema.GetReportByType();', null)
 
   return this.model(COLLECTION)
-    .find({ type: type })
+    .find({ type })
     .exec(callback)
 }
 
@@ -103,7 +103,7 @@ reportSchema.statics.getReportByStatus = function (status, callback) {
     return callback('Invalid Report Status - ReportSchema.GetReportByStatus();', null)
 
   return this.model(COLLECTION)
-    .find({ status: status })
+    .find({ status })
     .exec(callback)
 }
 

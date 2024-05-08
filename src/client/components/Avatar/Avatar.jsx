@@ -185,7 +185,7 @@ class Avatar extends React.Component {
           <img
             className='profile-pic uk-border-circle'
             style={{ height: size, width: size }}
-            src={`/uploads/users/${image || 'defaultProfile.jpg'}`}
+            src={`/uploads/users/${image || 'defaultProfile.png'}`}
             alt=''
           />
           {showOnlineBubble && (

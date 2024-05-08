@@ -338,7 +338,10 @@ class SingleTicketContainer extends React.Component {
                   <div className='ticket-details-wrap uk-position-relative uk-clearfix'>
                     <div className='ticket-assignee-wrap uk-clearfix' style={{ paddingRight: 30 }}>
                       <h4>Assignee</h4>
-                      <div className='ticket-assignee uk-clearfix'>
+                      <div style={{display: 'flex', justifyContent: 'space-between'}}>
+
+                     
+                      <div className='ticket-assignee uk-clearfix' >
                         {hasTicketUpdate && (
                           <a
                             role='button'
@@ -353,7 +356,7 @@ class SingleTicketContainer extends React.Component {
                                 showOnlineBubble={this.ticket.assignee !== undefined}
                                 userId={this.ticket.assignee && this.ticket.assignee._id}
                               />
-                              <span className='drop-icon material-icons'>keyboard_arrow_down</span>
+                              {/* <span className='drop-icon material-icons'>keyboard_arrow_down</span> */}
                             </PDropdownTrigger>
                           </a>
                         )}
@@ -364,7 +367,7 @@ class SingleTicketContainer extends React.Component {
                             userId={this.ticket.assignee && this.ticket.assignee._id}
                           />
                         )}
-                        <div className='ticket-assignee-details'>
+                        {/* <div className='ticket-assignee-details'>
                           {!this.ticket.assignee && <h3>No User Assigned</h3>}
                           {this.ticket.assignee && (
                             <Fragment>
@@ -378,7 +381,7 @@ class SingleTicketContainer extends React.Component {
                               <span className={'uk-display-block'}>{this.ticket.assignee.title}</span>
                             </Fragment>
                           )}
-                        </div>
+                        </div> */}
                       </div>
 
                       {hasTicketUpdate && (
@@ -389,7 +392,69 @@ class SingleTicketContainer extends React.Component {
                           onAssigneeClick={({ agent }) => (this.ticket.assignee = agent)}
                         />
                       )}
+                      {/* / */}
+                      <div className='ticket-assignee uk-clearfix' >
+                        {hasTicketUpdate && (
+                          <a
+                            role='button'
+                            title='Set Assignee'
+                            style={{ float: 'right' }}
+                            className='relative no-ajaxy'
+                            onClick={() => this.props.socket.emit(TICKETS_ASSIGNEE_LOAD)}
+                          >
+                            <PDropdownTrigger target={this.assigneeDropdownPartial}>
+                            {!this.ticket.assignee && <h5>Assign ticket to:</h5>}
+                          {this.ticket.assignee && (
+                            <Fragment>
+                              <h5>{this.ticket.assignee.fullname}</h5>
+                              <a
+                                className='comment-email-link uk-text-truncate uk-display-inline-block'
+                                href={`mailto:${this.ticket.assignee.email}`}
+                              >
+                                {this.ticket.assignee.email}
+                              </a>
+                              <span className={'uk-display-block'}>{this.ticket.assignee.title}</span>
+                            </Fragment>
+                          )}
+                              <span className='drop-icon material-icons'>keyboard_arrow_down</span>
+                            </PDropdownTrigger>
+                          </a>
+                        )}
+                        {!hasTicketUpdate && (
+                          <Avatar
+                            image={this.ticket.assignee && this.ticket.assignee.image}
+                            showOnlineBubble={this.ticket.assignee !== undefined}
+                            userId={this.ticket.assignee && this.ticket.assignee._id}
+                          />
+                        )}
+                        {/* <div className='ticket-assignee-details'>
+                          {!this.ticket.assignee && <h3>No User Assigned</h3>}
+                          {this.ticket.assignee && (
+                            <Fragment>
+                              <h3>{this.ticket.assignee.fullname}</h3>
+                              <a
+                                className='comment-email-link uk-text-truncate uk-display-inline-block'
+                                href={`mailto:${this.ticket.assignee.email}`}
+                              >
+                                {this.ticket.assignee.email}
+                              </a>
+                              <span className={'uk-display-block'}>{this.ticket.assignee.title}</span>
+                            </Fragment>
+                          )}
+                        </div> */}
+                      </div>
+
+                      {hasTicketUpdate && (
+                        <AssigneeDropdownPartial
+                          forwardedRef={this.assigneeDropdownPartial}
+                          ticketId={this.ticket._id}
+                          onClearClick={() => (this.ticket.assignee = undefined)}
+                          onAssigneeClick={({ agent }) => (this.ticket.assignee = agent)}
+                        />
+                      )}
+                       </div>
                     </div>
+                    
 
                     <div className='uk-width-1-1 padding-left-right-15'>
                       <div className='tru-card ticket-details uk-clearfix'>

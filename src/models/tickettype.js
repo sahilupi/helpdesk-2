@@ -1,8 +1,8 @@
-var _ = require('lodash')
-var mongoose = require('mongoose')
-var utils = require('../helpers/utils')
+const _ = require('lodash')
+const mongoose = require('mongoose')
+const utils = require('../helpers/utils')
 
-var COLLECTION = 'tickettypes'
+const COLLECTION = 'tickettypes'
 
 // Needed for Population
 require('./ticketpriority')
@@ -16,12 +16,12 @@ require('./ticketpriority')
  * @property {object} _id ```Required``` ```unique``` MongoDB Object ID
  * @property {String} name ```Required``` ```unique``` Name of Ticket Type
  */
-var ticketTypeSchema = mongoose.Schema({
+const ticketTypeSchema = mongoose.Schema({
   name: { type: String, required: true, unique: true },
   priorities: [{ type: mongoose.Schema.Types.ObjectId, ref: 'priorities' }]
 })
 
-var autoPopulatePriorities = function (next) {
+const autoPopulatePriorities = function (next) {
   this.populate('priorities')
   return next()
 }
@@ -45,7 +45,7 @@ ticketTypeSchema.pre('save', function (next) {
  * @param {QueryCallback} callback MongoDB Query Callback
  */
 ticketTypeSchema.statics.getTypes = function (callback) {
-  var q = this.model(COLLECTION).find({})
+  const q = this.model(COLLECTION).find({})
 
   return q.exec(callback)
 }
@@ -61,7 +61,7 @@ ticketTypeSchema.statics.getTypes = function (callback) {
  * @param {QueryCallback} callback MongoDB Query Callback
  */
 ticketTypeSchema.statics.getType = function (id, callback) {
-  var q = this.model(COLLECTION).findOne({ _id: id })
+  const q = this.model(COLLECTION).findOne({ _id: id })
 
   return q.exec(callback)
 }
@@ -77,7 +77,7 @@ ticketTypeSchema.statics.getType = function (id, callback) {
  * @param {QueryCallback} callback MongoDB Query Callback
  */
 ticketTypeSchema.statics.getTypeByName = function (name, callback) {
-  var q = this.model(COLLECTION).findOne({ name: name })
+  const q = this.model(COLLECTION).findOne({ name })
 
   return q.exec(callback)
 }
@@ -85,7 +85,7 @@ ticketTypeSchema.statics.getTypeByName = function (name, callback) {
 ticketTypeSchema.methods.addPriority = function (priorityId, callback) {
   if (!priorityId) return callback({ message: 'Invalid Priority Id' })
 
-  var self = this
+  const self = this
 
   if (!_.isArray(self.priorities)) {
     self.priorities = []
@@ -99,7 +99,7 @@ ticketTypeSchema.methods.addPriority = function (priorityId, callback) {
 ticketTypeSchema.methods.removePriority = function (priorityId, callback) {
   if (!priorityId) return callback({ message: 'Invalid Priority Id' })
 
-  var self = this
+  const self = this
 
   self.priorities = _.reject(self.priorities, function (p) {
     return p._id.toString() === priorityId.toString()

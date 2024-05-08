@@ -1,9 +1,9 @@
-var _ = require('lodash')
-var mongoose = require('mongoose')
+const _ = require('lodash')
+const mongoose = require('mongoose')
 
-var COLLECTION = 'role_order'
+const COLLECTION = 'role_order'
 
-var roleOrder = mongoose.Schema({
+const roleOrder = mongoose.Schema({
   order: [mongoose.Schema.Types.ObjectId]
 })
 
@@ -26,7 +26,7 @@ roleOrder.methods.updateOrder = function (order, callback) {
 }
 
 roleOrder.methods.getHierarchy = function (checkRoleId) {
-  var idx = _.findIndex(this.order, function (i) {
+  const idx = _.findIndex(this.order, function (i) {
     return i.toString() === checkRoleId.toString()
   })
   if (idx === -1) return []

@@ -1,19 +1,19 @@
-var _ = require('lodash')
-var async = require('async')
-var winston = require('../logger')
-var marked = require('marked')
-var sanitizeHtml = require('sanitize-html')
-var utils = require('../helpers/utils')
-var emitter = require('../emitter')
-var socketEvents = require('./socketEventConsts')
-var ticketSchema = require('../models/ticket')
-var prioritySchema = require('../models/ticketpriority')
-var userSchema = require('../models/user')
-var roleSchema = require('../models/role')
-var permissions = require('../permissions')
-var xss = require('xss')
+const _ = require('lodash')
+const async = require('async')
+const winston = require('../logger')
+const marked = require('marked')
+const sanitizeHtml = require('sanitize-html')
+const utils = require('../helpers/utils')
+const emitter = require('../emitter')
+const socketEvents = require('./socketEventConsts')
+const ticketSchema = require('../models/ticket')
+const prioritySchema = require('../models/ticketpriority')
+const userSchema = require('../models/user')
+const roleSchema = require('../models/role')
+const permissions = require('../permissions')
+const xss = require('xss')
 
-var events = {}
+const events = {}
 
 function register(socket) {
   events.onUpdateTicketGrid(socket)
@@ -85,7 +85,7 @@ events.onUpdateAssigneeList = function (socket) {
       userSchema.find({ role: { $in: roles }, deleted: false }, function (err, users) {
         if (err) return true
 
-        var sortedUser = _.sortBy(users, 'fullname')
+        const sortedUser = _.sortBy(users, 'fullname')
 
         utils.sendToSelf(socket, socketEvents.TICKETS_ASSIGNEE_LOAD, sortedUser)
       })
@@ -95,12 +95,74 @@ events.onUpdateAssigneeList = function (socket) {
 
 events.onSetAssignee = function (socket) {
   socket.on(socketEvents.TICKETS_ASSIGNEE_SET, function (data) {
-    var userId = data._id
-    var ownerId = socket.request.user._id
-    var ticketId = data.ticketId
-    ticketSchema.getTicketById(ticketId, function (err, ticket) {
+    const userId = data._id
+    const ownerId = socket.request.user._id
+    const ticketId = data.ticketId
+    ticketSchema.getTicketById(ticketId, async function (err, ticket) {
       if (err) return true
+      const User = require('../models/user');
+      try {
+        const user = await User.getUser(userId);
+        const owner = await User.getUser(ownerId);
 
+        // send mail to all employees
+        const path = require('path')
+        const mailer = require('../mailer')
+        const Email = require('email-templates')
+        const templateDir = path.resolve(__dirname, '../', 'mailer', 'templates')
+
+        const email = new Email({
+          views: {
+            root: templateDir,
+            options: {
+              extension: 'handlebars'
+            }
+          }
+        })
+
+        const settingSchema = require('../models/setting')
+        settingSchema.getSetting('gen:siteurl', async function (err, setting) {
+          if (err) console.log(err)
+
+          if (!setting) {
+            setting = { value: '' }
+          }
+          const finalTicket = {
+            userEmail: user.email,
+            userName: user.fullname,
+            ownerEmail: owner.email,
+            ownerName: owner.fullname,
+            type: ticket.type.name,
+            priority: ticket.priority.name,
+            tags: ticket.tags,
+            subject: ticket.subject,
+            uid: ticket.uid,
+            baseUrl: setting.value
+          }
+          email
+            .render('new-ticket-assign', finalTicket)
+            .then(function (html) {
+              const mailOptions = {
+                to: process.env.TICKET_ASSIGNEE_EMAIL_IDS + ',' + user.email,
+                subject: `New Ticket assigned #${ticket.uid} - ${ticket.subject}`,
+                html,
+                generateTextFromHTML: true
+              }
+
+              mailer.sendMail(mailOptions, function (err) {
+                if (err) {
+                  winston.warn(err)
+                  // return apiUtil.sendApiError_InvalidPostData(res)
+                }
+                console.log('success: Mail sent')
+                // return callback(null, { user: savedUser, group: group })
+              })
+            })
+        })
+
+      } catch (error) {
+        console.log(error)
+      }
       async.parallel(
         {
           setAssignee: function (callback) {
@@ -386,7 +448,7 @@ events.onAttachmentsUIUpdate = socket => {
 }
 
 module.exports = {
-  events: events,
-  eventLoop: eventLoop,
-  register: register
+  events,
+  eventLoop,
+  register
 }

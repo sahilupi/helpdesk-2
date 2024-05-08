@@ -1,7 +1,7 @@
-var mongoose = require('mongoose')
-var utils = require('../helpers/utils')
+const mongoose = require('mongoose')
+const utils = require('../helpers/utils')
 
-var COLLECTION = 'notices'
+const COLLECTION = 'notices'
 
 /**
  * @since 1.0
@@ -19,7 +19,7 @@ var COLLECTION = 'notices'
  * @property {String} message ```Required``` Message of the Notice
  * @property {Boolean} active ```Required``` __[default: false]__ Is the Notice Active?
  */
-var noticeSchema = mongoose.Schema({
+const noticeSchema = mongoose.Schema({
   name: { type: String, required: true },
   date: { type: Date, default: Date.now, required: true },
   color: { type: String, default: '#e74c3c', required: true },
@@ -51,7 +51,7 @@ noticeSchema.statics.getNotice = function (id, callback) {
 
 noticeSchema.statics.getNoticeByName = function (name, callback) {
   return this.model(COLLECTION)
-    .find({ name: name })
+    .find({ name })
     .exec(callback)
 }
 

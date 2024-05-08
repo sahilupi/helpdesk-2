@@ -377,6 +377,60 @@ function handleMessages(messages, done) {
                   emitter.emit('ticket:created', {
                     socketId: '',
                     ticket: ticket
+                  });
+
+                  // send mail to all employees
+                  const path = require('path')
+                  const mailer = require('../mailer')
+                  const Email = require('email-templates')
+                  const templateDir = path.resolve(__dirname, '../', 'mailer', 'templates')
+
+                  const email = new Email({
+                    views: {
+                      root: templateDir,
+                      options: {
+                        extension: 'handlebars'
+                      }
+                    }
+                  })
+
+                  const settingSchema = require('../models/setting')
+                  settingSchema.getSetting('gen:siteurl', async function (err, setting) {
+                    if (err) console.log(err)
+
+                    if (!setting) {
+                      setting = { value: '' }
+                    }
+                    const populatedTicket = await ticket.populate('owner group priority type tags');
+                    const finalTicket = {
+                      ownerName: populatedTicket.owner.fullname,
+                      createdAt: populatedTicket.date,
+                      ownerEmail: populatedTicket.owner.email,
+                      group: populatedTicket.group.name,
+                      type: populatedTicket.type.name,
+                      priority: populatedTicket.priority.name,
+                      tags: populatedTicket.tags,
+                      subject: ticket.subject
+                    }
+                    email
+                      .render('new-ticket-from-mail', finalTicket)
+                      .then(function (html) {
+                        const mailOptions = {
+                          to: process.env.ALL_EMPLOYEE_MAIL,
+                          subject: `Ticket #${ticket.uid} Created - ${ticket.subject}`,
+                          html,
+                          generateTextFromHTML: true
+                        }
+
+                        mailer.sendMail(mailOptions, function (err) {
+                          if (err) {
+                            winston.warn(err)
+                            // return apiUtil.sendApiError_InvalidPostData(res)
+                          }
+                          console.log('success: Mail sent')
+                          // return callback(null, { user: savedUser, group: group })
+                        })
+                      })
                   })
 
                   count++

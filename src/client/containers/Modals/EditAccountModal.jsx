@@ -1,17 +1,3 @@
-/*
- *       .                             .o8                     oooo
- *    .o8                             "888                     `888
- *  .o888oo oooo d8b oooo  oooo   .oooo888   .ooooo.   .oooo.o  888  oooo
- *    888   `888""8P `888  `888  d88' `888  d88' `88b d88(  "8  888 .8P'
- *    888    888      888   888  888   888  888ooo888 `"Y88b.   888888.
- *    888 .  888      888   888  888   888  888    .o o.  )88b  888 `88b.
- *    "888" d888b     `V88V"V8P' `Y8bod88P" `Y8bod8P' 8""888P' o888o o888o
- *  ========================================================================
- *  Author:     Chris Brame
- *  Updated:    2/23/19 4:03 PM
- *  Copyright (c) 2014-2019. All rights reserved.
- */
-
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
@@ -124,7 +110,8 @@ class EditAccountModal extends React.Component {
       teams: this.isAgentRole && this.teamsSelect ? this.teamsSelect.getSelected() : undefined,
       role: this.selectedRole,
       password: this.password.length > 0 ? this.password : undefined,
-      passwordConfirm: this.confirmPassword.length > 0 ? this.confirmPassword : undefined
+      passwordConfirm: this.confirmPassword.length > 0 ? this.confirmPassword : undefined,
+      _id: this.props.user._id
     }
 
     this.props.saveEditAccount(data)
@@ -133,7 +120,7 @@ class EditAccountModal extends React.Component {
   render () {
     const { user, edit } = this.props
     const customer = !this.isAgentRole
-    const profilePicture = user.image || 'defaultProfile.jpg'
+    const profilePicture = user.image || 'defaultProfile.png'
     const parsedRoles = helpers.getRolesByHierarchy()
     const roles = parsedRoles.map(role => {
       return { text: role.name, value: role._id }

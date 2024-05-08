@@ -1,12 +1,12 @@
 // var _               = require('lodash');
-var mongoose = require('mongoose')
+const mongoose = require('mongoose')
 require('moment-duration-format')
-var utils = require('../helpers/utils')
+const utils = require('../helpers/utils')
 const _ = require('lodash')
 
-var COLLECTION = 'statuses'
+const COLLECTION = 'statuses'
 
-var statusSchema = mongoose.Schema(
+const statusSchema = mongoose.Schema(
   {
     name: { type: String, required: true, unique: true },
     htmlColor: { type: String, default: '#29b955' },
@@ -56,13 +56,13 @@ statusSchema.statics.getStatus = function (callback) {
 
 statusSchema.statics.getStatusById = function (_id, callback) {
   return this.model(COLLECTION)
-    .findOne({ _id: _id })
+    .findOne({ _id })
     .exec(callback)
 }
 
 statusSchema.statics.getStatusByUID = function (uid, callback) {
   return this.model(COLLECTION)
-    .findOne({ uid: uid })
+    .findOne({ uid })
     .exec(callback)
 }
 

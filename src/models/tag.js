@@ -1,7 +1,7 @@
-var mongoose = require('mongoose')
-var utils = require('../helpers/utils')
+const mongoose = require('mongoose')
+const utils = require('../helpers/utils')
 
-var COLLECTION = 'tags'
+const COLLECTION = 'tags'
 
 /**
  * Tag Schema
@@ -12,7 +12,7 @@ var COLLECTION = 'tags'
  * @property {object} _id ```Required``` ```unique``` MongoDB Object ID
  * @property {String} name ```Required``` ```unique``` Name of Tag
  */
-var tagSchema = mongoose.Schema({
+const tagSchema = mongoose.Schema({
   name: { type: String, required: true, unique: true },
   normalized: String
 })
@@ -25,7 +25,7 @@ tagSchema.pre('save', function (next) {
 })
 
 tagSchema.statics.getTag = function (id, callback) {
-  var q = this.model(COLLECTION).findOne({ _id: id })
+  const q = this.model(COLLECTION).findOne({ _id: id })
 
   return q.exec(callback)
 }
@@ -40,7 +40,7 @@ tagSchema.statics.getTag = function (id, callback) {
  * @param {QueryCallback} callback MongoDB Query Callback
  */
 tagSchema.statics.getTags = function (callback) {
-  var q = this.model(COLLECTION)
+  const q = this.model(COLLECTION)
     .find({})
     .sort('normalized')
 
@@ -48,7 +48,7 @@ tagSchema.statics.getTags = function (callback) {
 }
 
 tagSchema.statics.getTagsWithLimit = function (limit, page, callback) {
-  var q = this.model(COLLECTION)
+  const q = this.model(COLLECTION)
     .find({})
     .sort('normalized')
 
@@ -60,7 +60,7 @@ tagSchema.statics.getTagsWithLimit = function (limit, page, callback) {
 }
 
 tagSchema.statics.getTagByName = function (tagName, callback) {
-  var q = this.model(COLLECTION)
+  const q = this.model(COLLECTION)
     .find({ name: tagName })
     .limit(1)
 
@@ -68,13 +68,13 @@ tagSchema.statics.getTagByName = function (tagName, callback) {
 }
 
 tagSchema.statics.tagExist = function (tagName, callback) {
-  var q = this.model(COLLECTION).countDocuments({ name: tagName })
+  const q = this.model(COLLECTION).countDocuments({ name: tagName })
 
   return q.exec(callback)
 }
 
 tagSchema.statics.getTagCount = function (callback) {
-  var q = this.model(COLLECTION)
+  const q = this.model(COLLECTION)
     .countDocuments({})
     .lean()
 

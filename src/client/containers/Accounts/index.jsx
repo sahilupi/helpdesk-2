@@ -101,7 +101,7 @@ class AccountsContainer extends React.Component {
     const items =
       this.props.accountsState.accounts &&
       this.props.accountsState.accounts.map(user => {
-        const userImage = user.get('image') || 'defaultProfile.jpg'
+        const userImage = user.get('image') || 'defaultProfile.png'
         const actionMenu = [<DropdownItem key={0} text={'Edit'} onClick={e => this.onEditAccountClicked(e, user)} />]
         if (user.get('deleted'))
           actionMenu.push(<DropdownItem key={2} text={'Enable'} onClick={e => this.onEnableAccountClicked(e, user)} />)
