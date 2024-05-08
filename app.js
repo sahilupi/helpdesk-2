@@ -21,8 +21,7 @@ nconf.argv().env()
 global.env = process.env.NODE_ENV || 'development'
 
 if (!process.env.FORK) {
-  winston.info('helpdesk v' + pkg.version + ' Copyright (C) 2021-2024 Techtweek')
-  winston.info('')
+  winston.info('Helpdesk v' + pkg.version + ' Copyright (C) 2021-' + new Date().getFullYear() + ' Techtweek')
   winston.info('Running in: ' + global.env)
   winston.info('Server Time: ' + new Date())
 }

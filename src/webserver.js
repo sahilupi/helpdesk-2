@@ -1,5 +1,3 @@
-
-
 const _ = require('lodash')
 const nconf = require('nconf')
   .argv()
