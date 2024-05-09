@@ -154,10 +154,13 @@ class SingleTicketContainer extends React.Component {
     setTimeout(async () => {
       const lastComment = this.ticket?.comments[this.ticket?.comments.length - 1].comment;
       // const parsedComment = ReactHtmlParser(lastComment);
-      const parsedComment = lastComment.replace(/<[^>]*>/g, '');
-      // this.props.getSuggestions(parsedComment);
-      await fetchCommenntSuggestion(this, parsedComment);
-      console.log(this.suggestion)
+      if(lastComment) {
+        const parsedComment = lastComment?.replace(/<[^>]*>/g, '');
+        // this.props.getSuggestions(parsedComment);
+        await fetchCommenntSuggestion(this, parsedComment);
+        console.log(this.suggestion)
+      }
+      
     }, 5000);
   }
 
@@ -241,10 +244,13 @@ class SingleTicketContainer extends React.Component {
             this.commentMDE.setEditorText('')
             const lastComment = this.ticket?.comments[this.ticket?.comments.length - 1].comment;
       // const parsedComment = ReactHtmlParser(lastComment);
-            const parsedComment = lastComment.replace(/<[^>]*>/g, '');
-            // this.props.getSuggestions(parsedComment);
-            await fetchCommenntSuggestion(this, parsedComment);
-            console.log(this.suggestion)
+            if(lastComment) {
+              const parsedComment = lastComment?.replace(/<[^>]*>/g, '');
+              // this.props.getSuggestions(parsedComment);
+              await fetchCommenntSuggestion(this, parsedComment);
+              console.log(this.suggestion)
+            }
+           
           }
 
           helpers.scrollToBottom('.page-content-right', true)
@@ -529,7 +535,7 @@ class SingleTicketContainer extends React.Component {
                           </div>
                         </div>
                         {/*  Group */}
-                        <div className='uk-width-1-1 nopadding uk-clearfix'>
+                        {/* <div className='uk-width-1-1 nopadding uk-clearfix'>
                           <span>Group</span>
                           {hasTicketUpdate && (
                             <select
@@ -550,7 +556,7 @@ class SingleTicketContainer extends React.Component {
                             </select>
                           )}
                           {!hasTicketUpdate && <div className={'input-box'}>{this.ticket.group.name}</div>}
-                        </div>
+                        </div> */}
                         {/*  Due Date */}
                         <div className='uk-width-1-1 p-0'>
                           <span>Due Date</span> {hasTicketUpdate && <span>-&nbsp;</span>}

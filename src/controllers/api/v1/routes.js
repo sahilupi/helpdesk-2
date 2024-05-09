@@ -40,7 +40,7 @@ module.exports = function (middleware, router, controllers) {
   router.delete('/api/v1/roles/:id', apiv1, isAdmin, apiCtrl.roles.delete)
 
   // Tickets
-  router.get('/api/v1/tickets', apiv1, canUser('tickets:view'), apiCtrl.tickets.get)
+  router.get('/api/v1/tickets', apiv1, apiCtrl.tickets.get) // canUser('tickets:view')
   router.get('/api/v1/tickets/group/:id', apiv1, isAdmin, canUser('tickets:view'), apiCtrl.tickets.getByGroup)
   router.get('/api/v1/tickets/search', apiv1, canUser('tickets:view'), apiCtrl.tickets.search)
   router.post('/api/v1/tickets/create', apiv1, canUser('tickets:create'), apiCtrl.tickets.create)

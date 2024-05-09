@@ -97,7 +97,7 @@ accountsApi.create = async function (req, res) {
       return { _id: g._id, name: g.name }
     })
 
-    if ((user.role.isAgent || user.role.isAdmin) && teams.length > 0) {
+    if (teams.length > 0) { // (user.role.isAgent || user.role.isAdmin) && 
       user.teams = teams.map(t => {
         return { _id: t._id, name: t.name }
       })
@@ -197,15 +197,33 @@ accountsApi.get = function (req, res) {
         async.eachSeries(
           accounts,
           function (account, next) {
-            Group.getAllGroupsOfUser(account._id, function (err, groups) {
+            const a = account.toObject()
+            Department.getUserDepartments(account._id, function (err, departments) {
               if (err) return next(err)
-              const a = account.toObject()
-              a.groups = groups.map(function (group) {
-                return { name: group.name, _id: group._id }
+
+              a.departments = departments.map(function (department) {
+                return { name: department.name, _id: department._id }
               })
-              resAccounts.push(a)
-              next()
+
+              Team.getTeamsOfUser(account._id, function (err, teams) {
+                if (err) return next(err)
+                a.teams = teams.map(function (team) {
+                  return { name: team.name, _id: team._id }
+                })
+                resAccounts.push(a);
+                next()
+                // Group.getAllGroupsOfUser(account._id, function (err, groups) {
+                //   if (err) return next(err)
+                //   const a = account.toObject()
+                //   a.groups = groups.map(function (group) {
+                //     return { name: group.name, _id: group._id }
+                //   })
+                //   resAccounts.push(a)
+                //   next()
+                // })
+              })
             })
+
           },
           function (err) {
             if (err) return apiUtil.sendApiError(res, 500, err.message)
@@ -366,8 +384,11 @@ accountsApi.update = async function (req, res) {
     } else {
       const allTeams = await Team.getTeams()
       for (const t of allTeams) {
+
         if (_.includes(postData.teams, t._id.toString())) {
-          if (t.isMember(postData._id)) teams.push(t)
+          if (t.isMember(postData._id)) {
+            teams.push(t)
+          }
           else {
             const result = await t.addMember(postData._id)
             if (result) {
@@ -390,7 +411,7 @@ accountsApi.update = async function (req, res) {
       return { _id: g._id, name: g.name }
     })
 
-    if ((user.role.isAgent || user.role.isAdmin) && teams.length > 0) {
+    if (teams.length > 0) { // (user.role.isAgent || user.role.isAdmin) && 
       user.teams = teams.map(t => {
         return { _id: t._id, name: t.name }
       })
@@ -458,7 +479,6 @@ accountsApi.update = async function (req, res) {
 
     return apiUtil.sendApiSuccess(res, { user })
   } catch (e) {
-    console.log('error ==> ', e)
     const error = { name: e.name, message: e.message }
     return apiUtil.sendApiError(res, 400, error)
   }

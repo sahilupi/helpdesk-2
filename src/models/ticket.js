@@ -63,8 +63,17 @@ const ticketSchema = mongoose.Schema({
   },
   group: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true,
     ref: 'groups'
+  },
+  team: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'teams',
+    required: true
+  },
+  department: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'departments',
+    required: true
   },
   assignee: {
     type: mongoose.Schema.Types.ObjectId,
@@ -870,6 +879,7 @@ ticketSchema.statics.getTicketsByDepartments = function (departments, object, ca
   }
 }
 
+// eslint-disable-next-line complexity
 function buildQueryWithObject(SELF, grpId, object, count) {
   const limit = object.limit || 10
   const page = object.page || 0

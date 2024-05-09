@@ -32,8 +32,8 @@ import MultiSelect from 'components/MultiSelect'
 @observer
 class EditDepartmentModal extends React.Component {
   @observable name = ''
-  @observable allGroups = false
-  @observable publicGroups = false
+  @observable allGroups = true
+  @observable publicGroups = true
 
   constructor (props) {
     super(props)
@@ -127,8 +127,7 @@ class EditDepartmentModal extends React.Component {
               ref={r => (this.teamsSelect = r)}
             />
           </div>
-          <hr />
-          <div className={'uk-margin-medium-bottom uk-clearfix'}>
+          <div style={{visibility: 'hidden', height: 0}} className={'uk-margin-medium-bottom uk-clearfix'}>
             <div className='uk-float-left'>
               <h4 style={{ paddingLeft: 2 }}>Access all current and new customer groups?</h4>
             </div>
@@ -149,7 +148,7 @@ class EditDepartmentModal extends React.Component {
               </label>
             </div>
           </div>
-          <div className={'uk-margin-medium-bottom uk-clearfix'}>
+          <div style={{visibility: 'hidden', height: 0}} className={'uk-margin-medium-bottom uk-clearfix'}>
             <div className='uk-float-left'>
               <h4 style={{ paddingLeft: 2 }}>Access all current and new public groups?</h4>
             </div>
@@ -167,7 +166,7 @@ class EditDepartmentModal extends React.Component {
               </label>
             </div>
           </div>
-          <div className={'uk-margin-medium-bottom'}>
+          <div style={{visibility: 'hidden', height: 0}} className={'uk-margin-medium-bottom'}>
             <label style={{ marginBottom: 5 }}>Customer Groups</label>
             <MultiSelect
               items={mappedGroups}

@@ -222,7 +222,7 @@ mailCheck.fetchMail = function () {
 }
 
 function handleMessages(messages, done) {
-  var count = 0
+  let count = 0
   messages.forEach(function (message) {
     if (
       !_.isUndefined(message.from) &&
@@ -317,13 +317,13 @@ function handleMessages(messages, done) {
           handlePriority: [
             'handleTicketType',
             function (result, callback) {
-              var type = result.handleTicketType
+              const type = result.handleTicketType
 
               if (mailCheck.fetchMailOptions.defaultPriority !== '') {
                 return callback(null, mailCheck.fetchMailOptions.defaultPriority)
               }
 
-              var firstPriority = _.first(type.priorities)
+              const firstPriority = _.first(type.priorities)
               if (!_.isUndefined(firstPriority)) {
                 mailCheck.fetchMailOptions.defaultPriority = firstPriority._id
               } else {
@@ -351,7 +351,7 @@ function handleMessages(messages, done) {
             'handlePriority',
             'handleStatus',
             function (results, callback) {
-              var HistoryItem = {
+              const HistoryItem = {
                 action: 'ticket:created',
                 description: 'Ticket was created.',
                 owner: message.owner._id
@@ -376,7 +376,7 @@ function handleMessages(messages, done) {
 
                   emitter.emit('ticket:created', {
                     socketId: '',
-                    ticket: ticket
+                    ticket
                   });
 
                   // send mail to all employees

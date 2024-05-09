@@ -84,9 +84,9 @@ class DepartmentsContainer extends React.Component {
                   Name
                 </th>
                 <th style={{ verticalAlign: 'middle', fontSize: 12, textTransform: 'uppercase' }}>Teams</th>
-                <th style={{ width: '25%', verticalAlign: 'middle', fontSize: 12, textTransform: 'uppercase' }}>
+                {/* <th style={{ width: '25%', verticalAlign: 'middle', fontSize: 12, textTransform: 'uppercase' }}>
                   Groups
-                </th>
+                </th> */}
                 <th
                   style={{
                     width: 220,
@@ -103,7 +103,7 @@ class DepartmentsContainer extends React.Component {
               {this.props.departments &&
                 this.props.departments.map(department => {
                   const teams = department.get('teams')
-                  const groups = department.get('groups')
+                  // const groups = department.get('groups')
                   return (
                     <tr key={department.get('_id')}>
                       {/* <td style={{ padding: '17px 18px', verticalAlign: 'middle' }}> */}
@@ -133,7 +133,7 @@ class DepartmentsContainer extends React.Component {
                             )
                           })}
                       </td>
-                      <td style={{ verticalAlign: 'middle' }}>
+                      {/* <td style={{ verticalAlign: 'middle' }}>
                         {department.get('allGroups') === true && (
                           <div>
                             <h6 className={'text-success'} style={{ fontWeight: 'bold' }}>
@@ -157,7 +157,7 @@ class DepartmentsContainer extends React.Component {
                               </div>
                             )
                           })}
-                      </td>
+                      </td> */}
                       <td>
                         <ButtonGroup>
                           {helpers.canUser('departments:update', true) && (

@@ -28,8 +28,8 @@ const sendSocketUpdateToUser = (user, ticket) => {
   )
 }
 
-const getTeamMembers = async group => {
-  const departments = await Department.getDepartmentsByGroup(group._id)
+const getTeamMembers = async user => {
+  const departments = await Department.getUserDepartments(user._id)
   if (!departments) throw new Error('Group is not assigned to any departments. Exiting...')
   return flattenDeep(
     departments.map(department => {
@@ -44,11 +44,11 @@ const getTeamMembers = async group => {
 
 const parseMemberEmails = async ticket => {
   const emails = []
-
-  const teamMembers = await getTeamMembers(ticket.group)
-
-  let members = concat(teamMembers, ticket.group.members)
-  let emailTo = concat(teamMembers, ticket.group.sendMailTo)
+  const teamMembers = await getTeamMembers(ticket.owner)
+  let members = teamMembers
+  // let members = concat(teamMembers, ticket.group.members)
+  let emailTo = teamMembers;
+  // let emailTo = concat(teamMembers, ticket.group.sendMailTo)
 
   emailTo = chain(emailTo)
     .filter(i => {
@@ -88,7 +88,8 @@ const sendMail = async (ticket, emails, baseUrl, betaEnabled) => {
           ; (async () => {
             try {
               if (!global.Handlebars) return reject(new Error('Could not load global.Handlebars'))
-              const template = await Template.findOne({ name: view })
+              const template = await Template.findOne({ name: view });
+
               if (!template) return reject(new Error('Invalid Template'))
               const html = global.Handlebars.compile(template.data['gjs-fullHtml'])(locals)
               const results = await email.juiceResources(html)
@@ -137,9 +138,9 @@ const sendMail = async (ticket, emails, baseUrl, betaEnabled) => {
 }
 
 const createNotification = async ticket => {
-  let members = await getTeamMembers(ticket.group)
+  let members = await getTeamMembers(ticket.owner._id)
 
-  members = concat(members, ticket.group.members)
+  // members = concat(members, ticket.group.members)
   members = uniqBy(members, i => i._id)
 
   for (const member of members) {
@@ -176,6 +177,7 @@ module.exports = async data => {
   const hostname = data.hostname
 
   try {
+
     const ticket = await Ticket.getTicketById(ticketObject._id)
     const settings = await Setting.getSettingsByName(['gen:siteurl', 'mailer:enable', 'beta:email'])
 
@@ -187,11 +189,12 @@ module.exports = async data => {
 
     const [emails] = await Promise.all([parseMemberEmails(ticket)])
 
-    if (mailerEnabled) await sendMail(ticket, emails, baseUrl, betaEnabled)
-    if (ticket.group.public) await createPublicNotification(ticket)
-    else await createNotification(ticket)
+    await createPublicNotification(ticket);
+    // if (ticket.group.public) await createPublicNotification(ticket)
+    await createNotification(ticket);
 
     util.sendToAllConnectedClients(io, socketEvents.TICKETS_CREATED, ticket)
+    if (mailerEnabled) await sendMail(ticket, emails, baseUrl, betaEnabled)
   } catch (e) {
     logger.warn(`[trudesk:events:ticket:created] - Error: ${e}`)
   }

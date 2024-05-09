@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <title>Ticket #{{ticket.uid}}</title>
@@ -8,15 +9,23 @@
         body {
             font-family: "Heebo", sans-serif;
         }
-        h1,h2,h3,h4,h5,h6 {
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
             margin-bottom: 2px;
             font-weight: 400;
         }
+
         p {
             font-weight: 300;
             font-size: 14px;
             line-height: 18px;
         }
+
         hr {
             display: block;
             margin: 0;
@@ -26,9 +35,11 @@
             height: 3px;
             border: none;
         }
+
         .strong {
             font-weight: 600;
         }
+
         .logo {
             height: 75px;
             text-align: center;
@@ -47,6 +58,7 @@
         }
     </style>
 </head>
+
 <body>
     <div>
         <p>
@@ -54,23 +66,23 @@
         </p>
         <hr>
         <h2>{{{ticket.subject}}}</h2>
-        <h5><span class="strong">Ticket Group:</span> {{ticket.group.name}}</h5>
         <h5><span class="strong">Ticket Submitted by:</span> {{ticket.owner.fullname}}</h5>
         <h5><span class="strong">Submitted Date:</span> {{ticket.date}}</h5>
         <h5><span class="strong">Ticket Type:</span> {{ticket.type.name}}</h5>
         <h5><span class="strong">Ticket Priority:</span> {{ticket.priority.name}}</h5>
-        <h5>
+        {{!-- <h5>
             <span class="strong">Tags:</span>
             <ul>
                 {{#each ticket.tags}}
-                    <li>{{name}}</li>
+                <li>{{name}}</li>
                 {{/each}}
             </ul>
-        </h5>
-        <br/>
+        </h5> --}}
+        <br />
         <h4>Ticket Issue</h4>
-        <hr/>
+        <hr />
         <p class="issue">{{{ticket.issue}}}</p>
     </div>
 </body>
+
 </html>

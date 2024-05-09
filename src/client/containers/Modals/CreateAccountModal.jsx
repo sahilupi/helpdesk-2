@@ -114,11 +114,11 @@ class CreateAccountModal extends React.Component {
       })
       .toArray()
 
-    const groups = this.props.groups
-      .map(group => {
-        return { text: group.get('name'), value: group.get('_id') }
-      })
-      .toArray()
+    // const groups = this.props.groups
+    //   .map(group => {
+    //     return { text: group.get('name'), value: group.get('_id') }
+    //   })
+    //   .toArray()
 
     const teams = this.props.teams
       .map(team => {
@@ -230,7 +230,7 @@ class CreateAccountModal extends React.Component {
                 Please select a role for this user
               </span>
             </div>
-            {!this.isAgentRole && (
+            {/* {!this.isAgentRole && (
               <div>
                 <div className='uk-margin-medium-bottom'>
                   <label className='uk-form-label'>Groups</label>
@@ -248,15 +248,13 @@ class CreateAccountModal extends React.Component {
                   </span>
                 </div>
               </div>
-            )}
-            {this.isAgentRole && (
+            )} */}
               <div>
                 <div className='uk-margin-medium-bottom'>
                   <label className='uk-form-label'>Teams</label>
                   <MultiSelect items={teams} onChange={() => {}} ref={r => (this.teamSelect = r)} />
                 </div>
               </div>
-            )}
             <div className='uk-modal-footer uk-text-right'>
               <Button text={'Close'} flat={true} waves={true} extraClass={'uk-modal-close'} />
               <Button text={'Create Account'} flat={true} waves={true} style={'success'} type={'submit'} />

@@ -70,14 +70,14 @@
         <p><span class="strong">Ticket Assigned by: </span> <b> {{ownerName}} ({{ownerEmail}})</b></p>
         <p><span class="strong">Ticket Type: </span> {{type}}</p>
         <p><span class="strong">Ticket Priority: </span> {{priority}}</p>
-        <h5>
+        {{!-- <h5>
             <span class="strong">Tags:</span>
             <ul>
                 {{#each tags}}
                 <li>{{name}}</li>
                 {{/each}}
             </ul>
-        </h5>
+        </h5> --}}
         <br />
         <p>You can check ticket details by clicking the link below</p>
         <a href="{{baseUrl}}/tickets/{{uid}}">{{baseUrl}}/tickets/{{uid}}</a>

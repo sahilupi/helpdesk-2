@@ -488,19 +488,19 @@ ticketsController.single = function (req, res) {
           })
         },
         function (userGroups, next) {
-          const hasPublic = permissions.canThis(user.role, 'tickets:public')
-          const groupIds = userGroups.map(function (g) {
-            return g._id.toString()
-          })
+          // const hasPublic = permissions.canThis(user.role, 'tickets:public')
+          // const groupIds = userGroups.map(function (g) {
+          //   return g._id.toString()
+          // })
 
-          if (!groupIds.includes(ticket.group._id.toString())) {
-            if (ticket.group.public && hasPublic) {
-              // Blank to bypass
-            } else {
-              winston.warn('User access ticket outside of group - UserId: ' + user._id)
-              return res.redirect('/tickets')
-            }
-          }
+          // if (!groupIds.includes(ticket?.group._id.toString())) {
+          //   if (ticket.group.public && hasPublic) {
+          //     // Blank to bypass
+          //   } else {
+          //     winston.warn('User access ticket outside of group - UserId: ' + user._id)
+          //     return res.redirect('/tickets')
+          //   }
+          // }
 
           if (
             ticket.owner._id.toString() !== req.user._id.toString() &&

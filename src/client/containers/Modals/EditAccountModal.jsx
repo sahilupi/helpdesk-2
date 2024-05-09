@@ -107,7 +107,7 @@ class EditAccountModal extends React.Component {
       title: this.title,
       email: this.email,
       groups: !this.isAgentRole && this.groupSelect ? this.groupSelect.getSelected() : undefined,
-      teams: this.isAgentRole && this.teamsSelect ? this.teamsSelect.getSelected() : undefined,
+      teams: this.teamsSelect ? this.teamsSelect.getSelected() : undefined, // this.isAgentRole && 
       role: this.selectedRole,
       password: this.password.length > 0 ? this.password : undefined,
       passwordConfirm: this.confirmPassword.length > 0 ? this.confirmPassword : undefined,
@@ -118,8 +118,8 @@ class EditAccountModal extends React.Component {
   }
 
   render () {
-    const { user, edit } = this.props
-    const customer = !this.isAgentRole
+    const { user, edit } = this.props;
+    // const customer = !this.isAgentRole
     const profilePicture = user.image || 'defaultProfile.png'
     const parsedRoles = helpers.getRolesByHierarchy()
     const roles = parsedRoles.map(role => {
@@ -142,13 +142,13 @@ class EditAccountModal extends React.Component {
           .toArray()
       : []
 
-    const groups = this.props.groups
-      ? this.props.groups
-          .map(group => {
-            return { text: group.get('name'), value: group.get('_id') }
-          })
-          .toArray()
-      : []
+    // const groups = this.props.groups
+    //   ? this.props.groups
+    //       .map(group => {
+    //         return { text: group.get('name'), value: group.get('_id') }
+    //       })
+    //       .toArray()
+    //   : []
 
     if (!user.teams) user.teams = []
     if (!user.departments) user.departments = []
@@ -272,7 +272,7 @@ class EditAccountModal extends React.Component {
                 />
               </div>
             )}
-            {this.props.groups && customer && (
+            {/* {this.props.groups && customer && (
               <div className='uk-margin-medium-bottom'>
                 <label className='uk-form-label'>Groups</label>
                 <MultiSelect
@@ -283,8 +283,8 @@ class EditAccountModal extends React.Component {
                   disabled={!edit}
                 />
               </div>
-            )}
-            {!customer && (
+            )} */}
+            {/* {!customer && ( */}
               <div>
                 <div className='uk-margin-medium-bottom'>
                   <label className='uk-form-label'>Teams</label>
@@ -307,7 +307,7 @@ class EditAccountModal extends React.Component {
                   />
                 </div>
               </div>
-            )}
+            {/* )} */}
             <div className='uk-modal-footer uk-text-right'>
               <Button text={'Close'} flat={true} waves={true} extraClass={'uk-modal-close'} />
               <Button

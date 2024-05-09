@@ -513,7 +513,7 @@ userSchema.statics.createUserFromEmail = function (email, callback) {
 
     const user = new self({
       username: email,
-      email: email,
+      email,
       password: plainTextPass,
       fullname: email,
       role: userRoleDefault.value
@@ -575,7 +575,7 @@ userSchema.statics.createUserFromEmail = function (email, callback) {
                 const mailOptions = {
                   to: savedUser.email,
                   subject: 'Welcome to Helpdesk! - Here are your account details.',
-                  html: html,
+                  html,
                   generateTextFromHTML: true
                 }
 
@@ -585,7 +585,7 @@ userSchema.statics.createUserFromEmail = function (email, callback) {
                     return callback(err)
                   }
 
-                  return callback(null, { user: savedUser, group: group })
+                  return callback(null, { user: savedUser, group })
                 })
               })
               .catch(function (err) {

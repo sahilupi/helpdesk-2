@@ -1,17 +1,3 @@
-/*
- *       .                             .o8                     oooo
- *    .o8                             "888                     `888
- *  .o888oo oooo d8b oooo  oooo   .oooo888   .ooooo.   .oooo.o  888  oooo
- *    888   `888""8P `888  `888  d88' `888  d88' `88b d88(  "8  888 .8P'
- *    888    888      888   888  888   888  888ooo888 `"Y88b.   888888.
- *    888 .  888      888   888  888   888  888    .o o.  )88b  888 `88b.
- *    "888" d888b     `V88V"V8P' `Y8bod88P" `Y8bod8P' 8""888P' o888o o888o
- *  ========================================================================
- *  Author:     Chris Brame
- *  Updated:    2/10/19 3:06 AM
- *  Copyright (c) 2014-2019. All rights reserved.
- */
-
 import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
@@ -22,6 +8,8 @@ import axios from 'axios'
 import Log from '../../logger'
 import { createTicket, fetchTicketTypes, getTagsWithPage } from 'actions/tickets'
 import { fetchGroups } from 'actions/groups'
+import { fetchTeams } from 'actions/teams'
+import { fetchDepartments } from 'actions/departments'
 import { fetchAccountsCreateTicket } from 'actions/accounts'
 
 import $ from 'jquery'
@@ -50,8 +38,10 @@ class CreateTicketModal extends React.Component {
 
   componentDidMount () {
     this.props.fetchTicketTypes()
+    this.props.fetchDepartments();
     this.props.getTagsWithPage({ limit: -1 })
     this.props.fetchGroups()
+    this.props.fetchTeams()
     this.props.fetchAccountsCreateTicket({ type: 'all', limit: 1000 })
     helpers.UI.inputs()
     helpers.formvalidator()
@@ -135,8 +125,10 @@ class CreateTicketModal extends React.Component {
 
     data.subject = e.target.subject.value
     data.group = this.groupSelect.value
+    data.team = this.teamSelect.value
     data.type = this.typeSelect.value
-    data.tags = this.tagSelect.value
+    data.department = this.departmentSelect.value
+    // data.tags = this.tagSelect.value
     data.priority = this.selectedPriority
     data.issue = this.issueMde.easymde.value()
     data.socketid = this.props.socket.io.engine.id
@@ -173,12 +165,24 @@ class CreateTicketModal extends React.Component {
       })
       .toArray()
 
+    const mappedTeams = this.props.teams
+      .map(team => {
+        return { text: team.get('name'), value: team.get('_id') }
+      })
+      .toArray();
+
+    const mappedDepartments = this.props.departments
+      .map(dpmt => {
+        return { text: dpmt.get('name'), value: dpmt.get('_id') }
+      })
+      .toArray();
+
     const mappedTicketTypes = this.props.ticketTypes.toArray().map(type => {
       return { text: type.get('name'), value: type.get('_id') }
     })
-    const mappedTicketTags = this.props.ticketTags.toArray().map(tag => {
-      return { text: tag.get('name'), value: tag.get('_id') }
-    })
+    // const mappedTicketTags = this.props.ticketTags.toArray().map(tag => {
+    //   return { text: tag.get('name'), value: tag.get('_id') }
+    // })
     return (
       <BaseModal {...this.props} options={{ bgclose: false }}>
         <form className={'uk-form-stacked'} onSubmit={e => this.onFormSubmit(e)}>
@@ -210,6 +214,18 @@ class CreateTicketModal extends React.Component {
                 </GridItem>
               )}
               <GridItem width={allowAgentUserTickets ? '2-3' : '1-1'}>
+                <label className={'uk-form-label'}>Departments</label>
+                <SingleSelect
+                  showTextbox={false}
+                  items={mappedDepartments}
+                  defaultValue={head(mappedDepartments) ? head(mappedDepartments).value : ''}
+                  onSelectChange={e => this.onGroupSelectChange(e)}
+                  width={'100%'}
+                  ref={i => (this.departmentSelect = i)}
+                />
+              </GridItem>
+              <div style={{visibility: 'hidden', height: 0}}>
+              <GridItem width={allowAgentUserTickets ? '2-3' : '1-1'}>
                 <label className={'uk-form-label'}>Group</label>
                 <SingleSelect
                   showTextbox={false}
@@ -220,6 +236,8 @@ class CreateTicketModal extends React.Component {
                   ref={i => (this.groupSelect = i)}
                 />
               </GridItem>
+              </div>
+              
             </Grid>
           </div>
           <div className='uk-margin-medium-bottom'>
@@ -237,7 +255,18 @@ class CreateTicketModal extends React.Component {
                   ref={i => (this.typeSelect = i)}
                 />
               </GridItem>
-              <GridItem width={'2-3'}>
+              <GridItem width={allowAgentUserTickets ? '2-3' : '1-1'}>
+                <label className={'uk-form-label'}>Teams</label>
+                <SingleSelect
+                  showTextbox={false}
+                  items={mappedTeams}
+                  defaultValue={head(mappedTeams) ? head(mappedTeams).value : ''}
+                  onSelectChange={e => this.onGroupSelectChange(e)}
+                  width={'100%'}
+                  ref={i => (this.teamSelect = i)}
+                />
+              </GridItem>
+              {/* <GridItem width={'2-3'}>
                 <label className={'uk-form-label'}>Tags</label>
                 <SingleSelect
                   showTextbox={false}
@@ -246,7 +275,7 @@ class CreateTicketModal extends React.Component {
                   multiple={true}
                   ref={i => (this.tagSelect = i)}
                 />
-              </GridItem>
+              </GridItem> */}
             </Grid>
           </div>
           <div className='uk-margin-medium-bottom'>
@@ -326,10 +355,14 @@ CreateTicketModal.propTypes = {
   ticketTags: PropTypes.object.isRequired,
   accounts: PropTypes.object.isRequired,
   groups: PropTypes.object.isRequired,
+  teams: PropTypes.object.isRequired,
+  departments: PropTypes.object.isRequired,
   createTicket: PropTypes.func.isRequired,
   fetchTicketTypes: PropTypes.func.isRequired,
   getTagsWithPage: PropTypes.func.isRequired,
   fetchGroups: PropTypes.func.isRequired,
+  fetchTeams: PropTypes.func.isRequired,
+  fetchDepartments: PropTypes.func.isRequired,
   fetchAccountsCreateTicket: PropTypes.func.isRequired
 }
 
@@ -341,6 +374,8 @@ const mapStateToProps = state => ({
   priorities: state.ticketsState.priorities,
   ticketTags: state.tagsSettings.tags,
   groups: state.groupsState.groups,
+  departments: state.departmentsState.departments,
+  teams: state.teamsState.teams,
   accounts: state.accountsState.accountsCreateTicket
 })
 
@@ -349,5 +384,7 @@ export default connect(mapStateToProps, {
   fetchTicketTypes,
   getTagsWithPage,
   fetchGroups,
+  fetchTeams,
+  fetchDepartments,
   fetchAccountsCreateTicket
 })(CreateTicketModal)

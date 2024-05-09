@@ -395,14 +395,14 @@ apiTickets.search = function (req, res) {
  */
 
 apiTickets.create = function (req, res) {
-  var response = {}
+  const response = {}
   response.success = true
 
-  var postData = req.body
+  const postData = req.body
   if (!_.isObject(postData) || !postData.subject || !postData.issue)
     return res.status(400).json({ success: false, error: 'Invalid Post Data' })
 
-  var socketId = _.isUndefined(postData.socketId) ? '' : postData.socketId
+  const socketId = _.isUndefined(postData.socketId) ? '' : postData.socketId
 
   if (_.isUndefined(postData.tags) || _.isNull(postData.tags)) {
     postData.tags = []
@@ -413,11 +413,11 @@ apiTickets.create = function (req, res) {
   async.waterfall(
     [
       function (done) {
-        var UserSchema = require('../../../models/user')
+        const UserSchema = require('../../../models/user')
         UserSchema.findOne({ _id: req.user._id }, done)
       },
       function (user, done) {
-        var TicketStatusSchema = require('../../../models/ticketStatus')
+        const TicketStatusSchema = require('../../../models/ticketStatus')
         TicketStatusSchema.findOne({ order: 0 }, function (err, status) {
           return done(err, status, user)
         })
@@ -425,14 +425,14 @@ apiTickets.create = function (req, res) {
       function (status, user, done) {
         if (user.deleted) return done({ status: 400, error: 'Invalid User' })
 
-        var HistoryItem = {
+        const HistoryItem = {
           action: 'ticket:created',
           description: 'Ticket was created.',
           owner: req.user._id
         }
 
-        var TicketSchema = require('../../../models/ticket')
-        var ticket = new TicketSchema(postData)
+        const TicketSchema = require('../../../models/ticket')
+        const ticket = new TicketSchema(postData)
 
         ticket.status = status?._id || '6630e46ac4e23816fa6961f8'
 
@@ -444,8 +444,8 @@ apiTickets.create = function (req, res) {
 
         ticket.subject = sanitizeHtml(ticket.subject).trim()
 
-        var marked = require('marked')
-        var tIssue = ticket.issue
+        const marked = require('marked')
+        let tIssue = ticket.issue
         tIssue = tIssue.replace(/(\r\n|\n\r|\r|\n)/g, '<br>')
         tIssue = sanitizeHtml(tIssue).trim()
         ticket.issue = xss(marked.parse(tIssue))
@@ -460,7 +460,7 @@ apiTickets.create = function (req, res) {
 
             emitter.emit('ticket:created', {
               hostname: req.headers.host,
-              socketId: socketId,
+              socketId,
               ticket: tt
             })
 

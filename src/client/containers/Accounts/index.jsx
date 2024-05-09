@@ -14,9 +14,9 @@ import Grid from 'components/Grid'
 import GridItem from 'components/Grid/GridItem'
 import PageContent from 'components/PageContent'
 import DropdownItem from 'components/Dropdown/DropdownItem'
-import DropdownTrigger from 'components/Dropdown/DropdownTrigger'
-import DropdownHeader from 'components/Dropdown/DropdownHeader'
-import Dropdown from 'components/Dropdown'
+// import DropdownTrigger from 'components/Dropdown/DropdownTrigger'
+// import DropdownHeader from 'components/Dropdown/DropdownHeader'
+// import Dropdown from 'components/Dropdown'
 import ButtonGroup from 'components/ButtonGroup'
 import Button from 'components/Button'
 import InfiniteScroll from 'react-infinite-scroller'
@@ -96,6 +96,8 @@ class AccountsContainer extends React.Component {
       }
     }
   }
+  
+  
 
   render () {
     const items =
@@ -116,7 +118,7 @@ class AccountsContainer extends React.Component {
           )
         const isAdmin = user.getIn(['role', 'isAdmin']) || false
         const isAgent = user.getIn(['role', 'isAgent']) || false
-        const customer = !isAdmin && !isAgent
+        // const customer = !isAdmin && !isAgent
         const isDeleted = user.get('deleted') || false
         return (
           <GridItem key={user.get('_id')} width={'1-5'} xLargeWidth={'1-6'} extraClass={'mb-25'}>
@@ -164,7 +166,7 @@ class AccountsContainer extends React.Component {
                     </div>
                   </li>
                   <li>
-                    {customer && user.get('groups') && (
+                    {/* {customer && user.get('groups') && (
                       <div className='tru-list-content'>
                         <span className='tru-list-heading'>Groups</span>
                         <span className='uk-text-small uk-text-muted uk-text-truncate'>
@@ -173,8 +175,9 @@ class AccountsContainer extends React.Component {
                           })}
                         </span>
                       </div>
-                    )}
-                    {!customer && user.get('teams') && (
+                    )} */}
+                    {/* !customer && */}
+                    { user.get('teams') && (
                       <div className='tru-list-content'>
                         <span className='tru-list-heading'>Teams</span>
                         <span className='uk-text-small uk-text-muted uk-text-truncate'>
@@ -185,7 +188,8 @@ class AccountsContainer extends React.Component {
                       </div>
                     )}
                   </li>
-                  {!customer && user.get('departments') && (
+                  {/* !customer && */}
+                  { user.get('departments') && (
                     <li>
                       <div className='tru-list-content'>
                         <span className='tru-list-heading'>Departments</span>
