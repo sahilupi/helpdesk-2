@@ -183,7 +183,7 @@ ticketsV2.batchUpdate = function (req, res) {
 }
 
 ticketsV2.delete = function (req, res) {
-  const uid = req.params.uid
+  const uid = req.params.uid;
   if (!uid) return apiUtils.sendApiError(res, 400, 'Invalid Parameters')
 
   Models.Ticket.softDeleteUid(uid, function (err, success) {
