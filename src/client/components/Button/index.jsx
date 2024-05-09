@@ -52,7 +52,7 @@ class Button extends React.Component {
       <button
         className={'uk-clearfix md-btn' + classBuild}
         onClick={onClick}
-        type={type ? type : 'button'}
+        type={type || 'button'}
         disabled={disabled}
         style={renderStyleOverride}
         ref={r => (this.button = r)}

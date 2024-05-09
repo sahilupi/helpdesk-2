@@ -40,8 +40,6 @@ import.csv
 /src/mailer/templates/promo/
 *.pem
 
-/public/uploads/tickets/
-/public/uploads/users/
 coverage.html
 *.bk
 apidocs
@@ -60,12 +58,10 @@ public/css/app.css
 sonar-project.properties
 .scannerwork/
 
-public/uploads/assets/*.*
 /src/backup/bin/
 backups/
 restores/
 
-public/uploads/assets/upload/
 
 stats\.json
 dist/

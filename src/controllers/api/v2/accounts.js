@@ -176,7 +176,7 @@ accountsApi.get = function (req, res) {
 
   const obj = {
     limit: limit === -1 ? 999999 : limit,
-    page: page,
+    page,
     showDeleted: query.showDeleted && query.showDeleted === 'true'
   }
 
@@ -185,7 +185,7 @@ accountsApi.get = function (req, res) {
       User.getUserWithObject(obj, function (err, accounts) {
         if (err) return apiUtil.sendApiError(res, 500, err.message)
 
-        return apiUtil.sendApiSuccess(res, { accounts: accounts, count: accounts.length })
+        return apiUtil.sendApiSuccess(res, { accounts, count: accounts.length })
       })
       break
     case 'customers':
