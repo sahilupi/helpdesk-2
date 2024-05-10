@@ -42,9 +42,9 @@ apiUsers.getWithLimit = function (req, res) {
   const search = req.query.search
 
   const obj = {
-    limit: limit,
-    page: page,
-    search: search
+    limit,
+    page,
+    search
   }
 
   async.waterfall(
@@ -465,7 +465,7 @@ apiUsers.profileUpdate = function (req, res) {
         await Session.destroy(user._id)
       }
 
-      return res.json({ success: true, user: user })
+      return res.json({ success: true, user })
     }
   )
 }
@@ -530,10 +530,10 @@ apiUsers.update = function (req, res) {
   async.series(
     {
       settings: function (done) {
-        var SettingUtil = require('../../../settings/settingsUtil')
+        const SettingUtil = require('../../../settings/settingsUtil')
         SettingUtil.getSettings(function (err, content) {
           if (err) return done(err)
-          var settings = content.data.settings
+          const settings = content.data.settings
           passwordComplexityEnabled = settings.accountsPasswordComplexity.value
 
           return done()
@@ -651,7 +651,7 @@ apiUsers.update = function (req, res) {
         await Session.destroy(user._id)
       }
 
-      return res.json({ success: true, user: user })
+      return res.json({ success: true, user })
     }
   )
 }
@@ -815,7 +815,7 @@ apiUsers.deleteUser = function (req, res) {
     function (err, disabled) {
       if (err) return res.status(400).json({ success: false, error: err.message })
 
-      return res.json({ success: true, disabled: disabled })
+      return res.json({ success: true, disabled })
     }
   )
 }
@@ -966,7 +966,7 @@ apiUsers.getNotifications = function (req, res) {
   notificationSchema.findAllForUser(req.user._id, function (err, notifications) {
     if (err) return res.status(500).json({ success: false, error: err.message })
 
-    return res.json({ success: true, notifications: notifications })
+    return res.json({ success: true, notifications })
   })
 }
 
@@ -1003,7 +1003,7 @@ apiUsers.generateApiKey = function (req, res) {
     user.addAccessToken(function (err, token) {
       if (err) return res.status(400).json({ error: 'Invalid Request' })
 
-      res.json({ token: token })
+      res.json({ token })
     })
   })
 }
@@ -1076,7 +1076,7 @@ apiUsers.generateL2Auth = function (req, res) {
       if (err) return res.status(400).json({ success: false, error: 'Invalid Request' })
 
       req.session.l2auth = 'totp'
-      return res.json({ success: true, generatedKey: generatedKey })
+      return res.json({ success: true, generatedKey })
     })
   })
 }

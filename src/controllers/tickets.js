@@ -446,7 +446,7 @@ ticketsController.print = function (req, res) {
  */
 ticketsController.single = function (req, res) {
   const user = req.user
-  const uid = req.params.id
+  const uid = req.params.id;
   if (isNaN(uid)) {
     return res.redirect('/tickets')
   }
@@ -502,12 +502,14 @@ ticketsController.single = function (req, res) {
           //   }
           // }
 
-          if (
-            ticket.owner._id.toString() !== req.user._id.toString() &&
-            !permissions.canThis(user.role, 'tickets:viewall')
-          ) {
-            return res.redirect('/tickets')
-          }
+          // commented because groups are removed
+          // if (
+          //   ticket.owner._id.toString() !== req.user._id.toString() &&
+          //   !permissions.canThis(user.role, 'tickets:viewall')
+          // ) {
+          //   console.log('unauth: 510')
+          //   return res.redirect('/tickets')
+          // }
 
           if (!permissions.canThis(user.role, 'comments:view')) ticket.comments = []
 

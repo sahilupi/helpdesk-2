@@ -1,32 +1,32 @@
 
 
-var winston = require('winston')
+const winston = require('winston')
 
-var path = require('path')
+const path = require('path')
 
-var fs = require('fs')
+const fs = require('fs')
 
-var request = require('request')
+const request = require('request')
 
-var rimraf = require('rimraf')
+const rimraf = require('rimraf')
 
-var mkdirp = require('mkdirp')
+const mkdirp = require('mkdirp')
 
-var tar = require('tar')
+const tar = require('tar')
 
-var apiPlugins = {}
+const apiPlugins = {}
 
-var pluginPath = path.join(__dirname, '../../../../plugins')
+const pluginPath = path.join(__dirname, '../../../../plugins')
 
-var pluginServerUrl = 'http://plugins.trudesk.io'
+const pluginServerUrl = 'http://plugins.trudesk.io'
 
 apiPlugins.installPlugin = function (req, res) {
-  var packageid = req.params.packageid
+  const packageid = req.params.packageid
 
   request.get(pluginServerUrl + '/api/plugin/package/' + packageid, function (err, response) {
     if (err) return res.status(400).json({ success: false, error: err })
 
-    var plugin = JSON.parse(response.body).plugin
+    const plugin = JSON.parse(response.body).plugin
 
     if (!plugin || !plugin.url) {
       return res.status(400).json({
@@ -38,13 +38,13 @@ apiPlugins.installPlugin = function (req, res) {
     request
       .get(pluginServerUrl + '/plugin/download/' + plugin.url)
       .on('response', function (response) {
-        var fws = fs.createWriteStream(path.join(pluginPath, plugin.url))
+        const fws = fs.createWriteStream(path.join(pluginPath, plugin.url))
 
         response.pipe(fws)
 
         response.on('end', function () {
           // Extract plugin
-          var pluginExtractFolder = path.join(pluginPath, plugin.name.toLowerCase())
+          const pluginExtractFolder = path.join(pluginPath, plugin.name.toLowerCase())
           rimraf(pluginExtractFolder, function (error) {
             if (error) winston.debug(error)
             if (error)
@@ -53,7 +53,7 @@ apiPlugins.installPlugin = function (req, res) {
                 error: 'Unable to remove plugin directory.'
               })
 
-            var fileFullPath = path.join(pluginPath, plugin.url)
+            const fileFullPath = path.join(pluginPath, plugin.url)
             mkdirp.sync(pluginExtractFolder)
 
             tar.extract(
@@ -68,7 +68,7 @@ apiPlugins.installPlugin = function (req, res) {
                   request.get(
                     pluginServerUrl + '/api/plugin/package/' + plugin._id + '/increasedownloads',
                     function () {
-                      res.json({ success: true, plugin: plugin })
+                      res.json({ success: true, plugin })
                       restartServer()
                     }
                   )
@@ -89,12 +89,12 @@ apiPlugins.installPlugin = function (req, res) {
 }
 
 apiPlugins.removePlugin = function (req, res) {
-  var packageid = req.params.packageid
+  const packageid = req.params.packageid
 
   request.get(pluginServerUrl + '/api/plugin/package/' + packageid, function (err, response, body) {
     if (err) return res.status(400).json({ success: false, error: err })
 
-    var plugin = JSON.parse(body).plugin
+    const plugin = JSON.parse(body).plugin
 
     if (plugin === null) {
       return res.json({ success: false, error: 'Invalid Plugin' })
@@ -115,7 +115,7 @@ apiPlugins.removePlugin = function (req, res) {
 }
 
 function restartServer() {
-  var pm2 = require('pm2')
+  const pm2 = require('pm2')
   pm2.connect(function (err) {
     if (err) {
       winston.error(err)

@@ -97,8 +97,6 @@ class AccountsContainer extends React.Component {
     }
   }
   
-  
-
   render () {
     const items =
       this.props.accountsState.accounts &&

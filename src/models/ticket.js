@@ -68,12 +68,10 @@ const ticketSchema = mongoose.Schema({
   team: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'teams',
-    required: true
   },
   department: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'departments',
-    required: true
   },
   assignee: {
     type: mongoose.Schema.Types.ObjectId,
@@ -190,7 +188,7 @@ ticketSchema.virtual('statusFormatted').get(function (callback) {
   try {
     ticketStatus.findOne({ uid: s }, function (err, status) {
       if (err) return callback(err)
-      if (!status) return callback('Invalid Status Id: ' + typeId)
+      if (!status) return callback('Invalid Status Id: ' + "typeId")
       if (typeof callback === 'function') return callback(null, status.get('name'))
     })
   } catch (error) {
@@ -899,18 +897,22 @@ function buildQueryWithObject(SELF, grpId, object, count) {
     )
 
   let query
-  if (count) query = SELF.model(COLLECTION).countDocuments({ groups: { $in: grpId }, deleted: false })
+  if (count) {
+    query = SELF.model(COLLECTION).countDocuments({ groups: { $in: grpId }, deleted: false });
+
+  }
   else {
     query = SELF.model(COLLECTION)
-      .find({ group: { $in: grpId }, deleted: false })
+      .find({ deleted: false }) // group: { $in: grpId },
       .populate(
         'owner assignee subscribers comments.owner notes.owner history.owner',
         'username fullname email role image title'
       )
       .populate('assignee', 'username fullname email role image title')
       .populate('type tags status group')
-      .sort({ uid: -1 })
+      .sort({ uid: -1 });
   }
+
 
   // Query with Limit?
   if (limit !== -1) query.skip(page * limit).limit(limit)
@@ -965,7 +967,6 @@ function buildQueryWithObject(SELF, grpId, object, count) {
   if (object.owner) query.where('owner', object.owner)
   if (object.assignedSelf) query.where('assignee', object.user)
   if (object.unassigned) query.where({ assignee: { $exists: false } })
-
   return query
 }
 
@@ -978,7 +979,6 @@ ticketSchema.statics.getTicketsWithObject = async function (grpId, object, callb
           throw new Error('Invalid parameter in - TicketSchema.GetTicketsWithObject()')
 
         const query = buildQueryWithObject(self, grpId, object)
-
         if (typeof callback === 'function') return query.exec(callback)
 
         const resTickets = await query.exec()

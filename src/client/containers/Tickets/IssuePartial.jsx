@@ -132,7 +132,7 @@ class IssuePartial extends React.Component {
                   <a href={attachment.path} className='no-ajaxy' rel='noopener noreferrer' target='_blank'>
                     {attachment.name}
                   </a>
-                  {this.status.get('isResolved') === false && (
+                  {this.status?.get('isResolved') === false && (
                     <a
                       role='button'
                       className={'remove-attachment'}
@@ -149,7 +149,7 @@ class IssuePartial extends React.Component {
           </div>
         </div>
         {/* Permissions on Fragment for edit */}
-        {this.status.get('isResolved') === false &&
+        {this.status?.get('isResolved') === false &&
           helpers.hasPermOverRole(this.props.owner.role, null, 'tickets:update', true) && (
             <Fragment>
               <div

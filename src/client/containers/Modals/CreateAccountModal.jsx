@@ -114,11 +114,11 @@ class CreateAccountModal extends React.Component {
       })
       .toArray()
 
-    // const groups = this.props.groups
-    //   .map(group => {
-    //     return { text: group.get('name'), value: group.get('_id') }
-    //   })
-    //   .toArray()
+    const groups = this.props.groups
+      .map(group => {
+        return { text: group.get('name'), value: group.get('_id') }
+      })
+      .toArray()
 
     const teams = this.props.teams
       .map(team => {
@@ -230,8 +230,8 @@ class CreateAccountModal extends React.Component {
                 Please select a role for this user
               </span>
             </div>
-            {/* {!this.isAgentRole && (
-              <div>
+            {/* {!this.isAgentRole && ( */}
+              <div style={{visibility: 'hidden', height: 0}}>
                 <div className='uk-margin-medium-bottom'>
                   <label className='uk-form-label'>Groups</label>
                   <MultiSelect
@@ -248,7 +248,7 @@ class CreateAccountModal extends React.Component {
                   </span>
                 </div>
               </div>
-            )} */}
+            {/* )} */}
               <div>
                 <div className='uk-margin-medium-bottom'>
                   <label className='uk-form-label'>Teams</label>

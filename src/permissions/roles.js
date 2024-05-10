@@ -1,7 +1,5 @@
 
 
-/* eslint-disable node/exports-style,node/exports-style */
-
 /*
  Permissions for Helpdesk. Define Roles / Groups.
  --- group:action action action
@@ -25,7 +23,7 @@
 
  plugins:manage                 = user can add/remove Plugins
  */
-var roles = {
+const roles = {
   admin: {
     id: 'admin',
     name: 'Administrator',

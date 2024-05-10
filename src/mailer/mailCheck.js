@@ -406,11 +406,14 @@ function handleMessages(messages, done) {
                       ownerName: populatedTicket.owner.fullname,
                       createdAt: populatedTicket.date,
                       ownerEmail: populatedTicket.owner.email,
-                      group: populatedTicket.group.name,
+                      // group: populatedTicket.group.name,
                       type: populatedTicket.type.name,
                       priority: populatedTicket.priority.name,
                       tags: populatedTicket.tags,
-                      subject: ticket.subject
+                      subject: ticket.subject,
+                      baseUrl: setting.value,
+                      uid: ticket.uid,
+                      issue: ticket.issue,
                     }
                     email
                       .render('new-ticket-from-mail', finalTicket)

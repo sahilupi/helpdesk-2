@@ -252,7 +252,7 @@ class EasyMDE extends React.Component {
 
   render () {
     setTimeout(() => {
-      this.easymde.codemirror.refresh()
+      this.easymde?.codemirror?.refresh()
     }, 250)
     return (
       <Fragment>

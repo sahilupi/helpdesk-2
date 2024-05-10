@@ -34,12 +34,13 @@ ticketsV2.get = async (req, res) => {
   }
 
   try {
-    let groups = []
+    let groups = [];
+
     if (req.user.role.isAdmin || req.user.role.isAgent) {
       const dbGroups = await Models.Department.getDepartmentGroupsOfUser(req.user._id)
       groups = dbGroups.map(g => g._id)
     } else {
-      groups = await Models.Group.getAllGroupsOfUser(req.user._id)
+      groups = await Models.Group.getAllGroupsOfUser(req.user._id);
     }
 
     const mappedGroups = groups.map(g => g._id)
@@ -80,8 +81,7 @@ ticketsV2.get = async (req, res) => {
         break
     }
 
-    if (!permissions.canThis(req.user.role, 'tickets:viewall', false)) queryObject.owner = req.user._id
-
+    // if (!permissions.canThis(req.user.role, 'tickets:viewall', false)) queryObject.owner = req.user._id
     const tickets = await Models.Ticket.getTicketsWithObject(mappedGroups, queryObject)
     const totalCount = await Models.Ticket.getCountWithObject(mappedGroups, queryObject)
 
@@ -120,19 +120,21 @@ ticketsV2.single = async function (req, res) {
         }
       })
     } else {
-      Models.Group.getAllGroupsOfUser(req.user._id, function (err, userGroups) {
-        if (err) return apiUtils.sendApiError(res, 500, err)
+      return apiUtils.sendApiSuccess(res, { ticket })
+      // Models.Group.getAllGroupsOfUser(req.user._id, function (err, userGroups) {
+      //   if (err) return apiUtils.sendApiError(res, 500, err)
 
-        const groupIds = userGroups.map(function (m) {
-          return m._id.toString()
-        })
+      //   const groupIds = userGroups.map(function (m) {
+      //     return m._id.toString()
+      //   })
 
-        if (groupIds.includes(ticket.group._id.toString())) {
-          return apiUtils.sendApiSuccess(res, { ticket })
-        } else {
-          return apiUtils.sendApiError(res, 403, 'Forbidden')
-        }
-      })
+      //   if (groupIds.includes(ticket.group._id.toString())) {
+      //     return apiUtils.sendApiSuccess(res, { ticket })
+      //   } else {
+      //     console.log('Forbidden: 133')
+      //     return apiUtils.sendApiError(res, 403, 'Forbidden')
+      //   }
+      // })
     }
   })
 }

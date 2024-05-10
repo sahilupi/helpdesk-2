@@ -18,7 +18,7 @@ module.exports = function (middleware, router, controllers) {
   // Shorten consts
   const apiv1 = middleware.api
   const isAdmin = middleware.isAdmin
-  const isAgent = middleware.isAgent
+  // const isAgent = middleware.isAgent
   const isAgentOrAdmin = middleware.isAgentOrAdmin
   const canUser = middleware.canUser
   const apiCtrl = controllers.api.v1
@@ -103,7 +103,7 @@ module.exports = function (middleware, router, controllers) {
     tagSchema.countDocuments({}, function (err, count) {
       if (err) return res.status(500).json({ success: false, error: err })
 
-      return res.json({ success: true, count: count })
+      return res.json({ success: true, count })
     })
   })
 

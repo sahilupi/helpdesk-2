@@ -166,9 +166,10 @@ class MailerSettingsTemplates extends React.Component {
           title={'Enable New Email Templates'}
           subtitle={
             <div>
-              The new email notification system is currently in beta. Please See{' '}
+              The new email notification system is currently in beta. 
+              {/* Please See{' '}
               <a href='https://forum.trudesk.io/t/beta-email-notification-templates'>Email Notification Templates</a>{' '}
-              for more information.
+              for more information. */}
             </div>
           }
           component={

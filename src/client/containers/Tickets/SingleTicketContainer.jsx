@@ -5,10 +5,11 @@ import { observable, computed, makeObservable } from 'mobx'
 import { observer } from 'mobx-react'
 import sortBy from 'lodash/sortBy'
 import union from 'lodash/union'
-import ReactHtmlParser from 'react-html-parser'
+// import ReactHtmlParser from 'react-html-parser'
 
 import { transferToThirdParty, fetchTicketTypes, fetchTicketStatus, getSuggestions } from 'actions/tickets'
 import { fetchGroups, unloadGroups } from 'actions/groups'
+import { fetchTeams } from 'actions/teams'
 import { showModal } from 'actions/common'
 
 import {
@@ -60,14 +61,14 @@ const fetchTicket = parent => {
       // }, 3000)
     })
     .catch(error => {
-      if (error.response.status === 403) {
+      if (error.response?.status === 403) {
         History.pushState(null, null, '/tickets')
       }
       Log.error(error)
     })
 }
 
-const fetchCommenntSuggestion = async (parent, comment) => {
+const fetchCommentSuggestion = async (parent, comment) => {
   try {
     const res = await axios
     .get(`/api/v2/tickets/get-suggestions?comment=${comment}`);
@@ -75,7 +76,7 @@ const fetchCommenntSuggestion = async (parent, comment) => {
       parent.suggestion = res.data.suggestion;
     }
   } catch (error) {
-    if (error.response.status === 403) {
+    if (error.response?.status === 403) {
       History.pushState(null, null, '/tickets')
     }
     Log.error(error)
@@ -149,17 +150,21 @@ class SingleTicketContainer extends React.Component {
     fetchTicket(this)
     this.props.fetchTicketTypes()
     
+    this.props.fetchTeams()
     this.props.fetchGroups()
     this.props.fetchTicketStatus()
     setTimeout(async () => {
-      const lastComment = this.ticket?.comments[this.ticket?.comments.length - 1].comment;
-      // const parsedComment = ReactHtmlParser(lastComment);
-      if(lastComment) {
-        const parsedComment = lastComment?.replace(/<[^>]*>/g, '');
-        // this.props.getSuggestions(parsedComment);
-        await fetchCommenntSuggestion(this, parsedComment);
-        console.log(this.suggestion)
+      if(this.ticket?.comments[this.ticket?.comments.length - 1]) {
+        const lastComment = this.ticket?.comments[this.ticket?.comments.length - 1]?.comment;
+        // const parsedComment = ReactHtmlParser(lastComment);
+        if(lastComment) {
+          const parsedComment = lastComment?.replace(/<[^>]*>/g, '');
+          // this.props.getSuggestions(parsedComment);
+          await fetchCommentSuggestion(this, parsedComment);
+          console.log(this.suggestion)
+        }
       }
+      
       
     }, 5000);
   }
@@ -198,7 +203,7 @@ class SingleTicketContainer extends React.Component {
   onUpdateAssignee (data) {
     if (this.ticket._id === data._id) {
       this.ticket.assignee = data.assignee
-      if (this.ticket.assignee && this.ticket.assignee._id === this.props.shared.sessionUser._id)
+      if (this.ticket.assignee && this.ticket.assignee._id === this.props.shared.sessionUser?._id)
         this.isSubscribed = true
     }
   }
@@ -229,25 +234,25 @@ class SingleTicketContainer extends React.Component {
     axios
       .post(`/api/v1/tickets/add${isNote ? 'note' : 'comment'}`, {
         _id: !isNote && this.ticket._id,
-        comment: !isNote && this.commentMDE.getEditorText(),
+        comment: !isNote && this.commentMDE?.getEditorText(),
 
         ticketid: isNote && this.ticket._id,
-        note: isNote && this.noteMDE.getEditorText()
+        note: isNote && this.noteMDE?.getEditorText()
       })
       .then(async (res) => {
         if (res && res.data && res.data.success) {
           if (isNote) {
             this.ticket.notes = res.data.ticket.notes
-            this.noteMDE.setEditorText('')
+            this.noteMDE?.setEditorText('')
           } else {
             this.ticket.comments = res.data.ticket.comments
-            this.commentMDE.setEditorText('')
+            this.commentMDE?.setEditorText('')
             const lastComment = this.ticket?.comments[this.ticket?.comments.length - 1].comment;
       // const parsedComment = ReactHtmlParser(lastComment);
             if(lastComment) {
               const parsedComment = lastComment?.replace(/<[^>]*>/g, '');
               // this.props.getSuggestions(parsedComment);
-              await fetchCommenntSuggestion(this, parsedComment);
+              await fetchCommentSuggestion(this, parsedComment);
               console.log(this.suggestion)
             }
            
@@ -267,13 +272,13 @@ class SingleTicketContainer extends React.Component {
   onSubscriberChanged (e) {
     axios
       .put(`/api/v1/tickets/${this.ticket._id}/subscribe`, {
-        user: this.props.shared.sessionUser._id,
+        user: this.props.shared.sessionUser?._id,
         subscribe: e.target.checked
       })
       .then(res => {
         if (res.data.success && res.data.ticket) {
           this.ticket.subscribers = res.data.ticket.subscribers
-          this.isSubscribed = this.ticket.subscribers.findIndex(i => i._id === this.props.shared.sessionUser._id) !== -1
+          this.isSubscribed = this.ticket.subscribers.findIndex(i => i._id === this.props.shared.sessionUser?._id) !== -1
         }
       })
       .catch(error => {
@@ -289,12 +294,20 @@ class SingleTicketContainer extends React.Component {
     console.log('focused in editor')
   }
 
+  // eslint-disable-next-line complexity
   render () {
     const mappedGroups = this.props.groupsState
       ? this.props.groupsState.groups.map(group => {
           return { text: group.get('name'), value: group.get('_id') }
         })
       : []
+    // const mappedTeams = this.props.teamsState
+    //   ? this.props.teamsState.teams.map(team => {
+    //       return { text: team?.get('name'), value: team?.get('_id') }
+    //     })
+    //   : [];
+
+    //   console.log("mappedTeams==>", mappedTeams)
 
     const mappedTypes = this.props.ticketTypes
       ? this.props.ticketTypes.map(type => {
@@ -303,12 +316,12 @@ class SingleTicketContainer extends React.Component {
       : []
 
     // Perms
-    const hasTicketUpdate = this.ticket && this.ticket.status.isResolved === false && helpers.canUser('tickets:update')
-    const statusObj = this.ticket ? this.props.ticketStatuses.find(s => s.get('_id') === this.ticket.status._id) : null
+    const hasTicketUpdate = this.ticket && this.ticket?.status?.isResolved === false && helpers.canUser('tickets:update')
+    const statusObj = this.ticket ? this.props.ticketStatuses.find(s => s.get('_id') === this.ticket?.status?._id) : null
 
     const hasTicketStatusUpdate = () => {
-      const isAgent = this.props.sessionUser ? this.props.sessionUser.role.isAgent : false
-      const isAdmin = this.props.sessionUser ? this.props.sessionUser.role.isAdmin : false
+      const isAgent = this.props.sessionUser ? this.props.sessionUser?.role.isAgent : false
+      const isAdmin = this.props.sessionUser ? this.props.sessionUser?.role?.isAdmin : false
       if (isAgent || isAdmin) {
         return helpers.canUser('tickets:update')
       } else {
@@ -331,7 +344,7 @@ class SingleTicketContainer extends React.Component {
                   <p>Ticket #{this.ticket.uid}</p>
                   <StatusSelector
                     ticketId={this.ticket._id}
-                    status={this.ticket.status._id}
+                    status={this.ticket?.status?._id}
                     socket={this.props.socket}
                     onStatusChange={status => {
                       this.ticket.status = status
@@ -535,7 +548,7 @@ class SingleTicketContainer extends React.Component {
                           </div>
                         </div>
                         {/*  Group */}
-                        {/* <div className='uk-width-1-1 nopadding uk-clearfix'>
+                        <div className='uk-width-1-1 nopadding uk-clearfix' style={{visibility: 'hidden', height: 0, width: 0}}>
                           <span>Group</span>
                           {hasTicketUpdate && (
                             <select
@@ -556,7 +569,7 @@ class SingleTicketContainer extends React.Component {
                             </select>
                           )}
                           {!hasTicketUpdate && <div className={'input-box'}>{this.ticket.group.name}</div>}
-                        </div> */}
+                        </div>
                         {/*  Due Date */}
                         <div className='uk-width-1-1 p-0'>
                           <span>Due Date</span> {hasTicketUpdate && <span>-&nbsp;</span>}
@@ -882,10 +895,10 @@ class SingleTicketContainer extends React.Component {
                     )}
 
                     {/* Comment / Notes Form */}
-                    {this.ticket.status.isResolved === false &&
+                    {this.ticket?.status?.isResolved === false &&
                       (helpers.canUser('comments:create', true) || helpers.canUser('tickets:notes', true)) && (
                         <div className='uk-width-1-1 ticket-reply uk-clearfix'>
-                          <Avatar image={this.props.shared.sessionUser.image} showOnlineBubble={false} />
+                          <Avatar image={this.props.shared.sessionUser?.image} showOnlineBubble={false} />
                           <TruTabWrapper style={{ paddingLeft: 85 }}>
                             <TruTabSelectors showTrack={false}>
                               {helpers.canUser('comments:create', true) && (
@@ -978,7 +991,9 @@ SingleTicketContainer.propTypes = {
   fetchTicketTypes: PropTypes.func.isRequired,
   getSuggestions: PropTypes.func.isRequired,
   groupsState: PropTypes.object.isRequired,
+  teamsState: PropTypes.object.isRequired,
   fetchGroups: PropTypes.func.isRequired,
+  fetchTeams: PropTypes.func.isRequired,
   unloadGroups: PropTypes.func.isRequired,
   showModal: PropTypes.func.isRequired,
   transferToThirdParty: PropTypes.func,
@@ -993,13 +1008,15 @@ const mapStateToProps = state => ({
   socket: state.shared.socket,
   ticketTypes: state.ticketsState.types,
   ticketStatuses: state.ticketsState.ticketStatuses,
-  groupsState: state.groupsState
+  groupsState: state.groupsState,
+  teamsState: state.teamsState
 })
 
 export default connect(mapStateToProps, {
   fetchTicketTypes,
   getSuggestions,
   fetchGroups,
+  fetchTeams,
   fetchTicketStatus,
   unloadGroups,
   showModal,

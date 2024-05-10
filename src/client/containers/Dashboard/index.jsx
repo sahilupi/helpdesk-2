@@ -167,7 +167,7 @@ class DashboardContainer extends React.Component {
                 }
               />
             </GridItem>
-            <GridItem width={'1-2'} extraClass={'uk-margin-medium-top'}>
+            {/* <GridItem width={'1-2'} extraClass={'uk-margin-medium-top'}>
               <TruCard
                 loaderActive={this.props.dashboardState.loadingTopGroups}
                 animateLoader={true}
@@ -183,8 +183,8 @@ class DashboardContainer extends React.Component {
                   </div>
                 }
               />
-            </GridItem>
-            <GridItem width={'1-2'} extraClass={'uk-margin-medium-top'}>
+            </GridItem> */}
+            {/* <GridItem width={'1-2'} extraClass={'uk-margin-medium-top'}>
               <TruCard
                 loaderActive={this.props.dashboardState.loadingTopTags}
                 animateLoader={true}
@@ -197,11 +197,11 @@ class DashboardContainer extends React.Component {
                 }
                 content={
                   <div>
-                    <D3Pie type={'donut'} data={this.props.dashboardState.topTags.toJS()} />
+                    <D3Pie type={'donut'} data={this.props.dashboardState.toJS()} />
                   </div>
                 }
               />
-            </GridItem>
+            </GridItem> */}
             <GridItem width={'1-2'} extraClass={'uk-margin-medium-top'}>
               <TruCard
                 style={{ minHeight: 250 }}
