@@ -1,11 +1,9 @@
+const _ = require('lodash')
+const async = require('async')
+const GroupSchema = require('../../../models/group')
+const ticketSchema = require('../../../models/ticket')
 
-
-var _ = require('lodash')
-var async = require('async')
-var GroupSchema = require('../../../models/group')
-var ticketSchema = require('../../../models/ticket')
-
-var apiGroups = {}
+const apiGroups = {}
 
 /**
  * @api {get} /api/v1/groups Get Groups
@@ -26,9 +24,9 @@ var apiGroups = {}
  *
  */
 apiGroups.get = function (req, res) {
-  var user = req.user
-  var permissions = require('../../../permissions')
-  var hasPublic = permissions.canThis(user.role, 'tickets:public')
+  const user = req.user
+  const permissions = require('../../../permissions')
+  const hasPublic = permissions.canThis(user.role, 'tickets:public')
 
   if (user.role.isAgent || user.role.isAdmin) {
     GroupSchema.getAllGroups(function (err, groups) {
@@ -39,7 +37,7 @@ apiGroups.get = function (req, res) {
           return !g.public
         })
 
-      return res.json({ success: true, groups: groups })
+      return res.json({ success: true, groups })
     })
   } else {
     GroupSchema.getAllGroupsOfUser(user._id, function (err, groups) {
@@ -51,10 +49,10 @@ apiGroups.get = function (req, res) {
 
           groups = groups.concat(grps)
 
-          return res.json({ success: true, groups: groups })
+          return res.json({ success: true, groups })
         })
       } else {
-        return res.json({ success: true, groups: groups })
+        return res.json({ success: true, groups })
       }
     })
   }
@@ -83,7 +81,7 @@ apiGroups.getAll = function (req, res) {
   GroupSchema.getAllGroups(function (err, groups) {
     if (err) return res.status(400).json({ success: false, error: err.message })
 
-    return res.json({ success: true, groups: groups })
+    return res.json({ success: true, groups })
   })
 }
 
@@ -106,13 +104,13 @@ apiGroups.getAll = function (req, res) {
  *
  */
 apiGroups.getSingleGroup = function (req, res) {
-  var id = req.params.id
+  const id = req.params.id
   if (_.isUndefined(id)) return res.status(400).json({ error: 'Invalid Request' })
 
   GroupSchema.getGroupById(id, function (err, group) {
     if (err) return res.status(400).json({ error: err.message })
 
-    return res.status(200).json({ success: true, group: group })
+    return res.status(200).json({ success: true, group })
   })
 }
 
@@ -150,7 +148,7 @@ apiGroups.getSingleGroup = function (req, res) {
  }
  */
 apiGroups.create = function (req, res) {
-  var Group = new GroupSchema()
+  const Group = new GroupSchema()
 
   Group.name = req.body.name
   Group.members = req.body.members
@@ -159,7 +157,7 @@ apiGroups.create = function (req, res) {
   Group.save(function (err, group) {
     if (err) return res.status(400).json({ success: false, error: 'Error: ' + err.message })
 
-    res.json({ success: true, error: null, group: group })
+    res.json({ success: true, error: null, group })
   })
 }
 
@@ -197,8 +195,8 @@ apiGroups.create = function (req, res) {
  }
  */
 apiGroups.updateGroup = function (req, res) {
-  var id = req.params.id
-  var data = req.body
+  const id = req.params.id
+  const data = req.body
   if (_.isUndefined(id) || _.isUndefined(data) || !_.isObject(data))
     return res.status(400).json({ error: 'Invalid Post Data' })
 
@@ -212,8 +210,8 @@ apiGroups.updateGroup = function (req, res) {
   GroupSchema.getGroupById(id, function (err, group) {
     if (err) return res.status(400).json({ error: err.message })
 
-    var members = _.compact(data.members)
-    var sendMailTo = _.compact(data.sendMailTo)
+    const members = _.compact(data.members)
+    const sendMailTo = _.compact(data.sendMailTo)
 
     group.name = data.name
     group.members = members
@@ -249,13 +247,13 @@ apiGroups.updateGroup = function (req, res) {
  }
  */
 apiGroups.deleteGroup = function (req, res) {
-  var id = req.params.id
+  const id = req.params.id
   if (_.isUndefined(id)) return res.status(400).json({ success: false, error: 'Error: Invalid Group Id.' })
 
   async.series(
     [
       function (next) {
-        var grps = [id]
+        const grps = [id]
         ticketSchema.getTickets(grps, function (err, tickets) {
           if (err) {
             return next('Error: ' + err.message)

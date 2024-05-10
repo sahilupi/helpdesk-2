@@ -4,9 +4,9 @@ import PropTypes from 'prop-types'
 import Log from '../../logger'
 
 import $ from 'jquery'
-import ReactMarkdown from 'react-markdown'
-import gfm from 'remark-gfm'
-import rehypeRaw from 'rehype-raw'
+// import ReactMarkdown from 'react-markdown'
+// import gfm from 'remark-gfm'
+// import rehypeRaw from 'rehype-raw'
 import toMarkdown from 'tomarkdown'
 import Easymde from 'easymde'
 

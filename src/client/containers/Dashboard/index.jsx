@@ -22,7 +22,7 @@ import PeityBar from 'components/Peity/peity-bar'
 import PeityPie from 'components/Peity/peity-pie'
 import PeityLine from 'components/Peity/peity-line'
 import MGraph from 'components/MGraph'
-import D3Pie from 'components/D3/d3pie'
+// import D3Pie from 'components/D3/d3pie'
 
 import moment from 'moment-timezone'
 import helpers from 'lib/helpers'
@@ -31,6 +31,7 @@ import helpers from 'lib/helpers'
 class DashboardContainer extends React.Component {
   @observable timespan = 30
 
+  // eslint-disable-next-line no-useless-constructor
   constructor (props) {
     super(props)
   }

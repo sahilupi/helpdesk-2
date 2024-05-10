@@ -3,7 +3,7 @@ const async = require('async')
 const logger = require('../../../logger')
 const apiUtils = require('../apiUtils')
 const Models = require('../../../models')
-const permissions = require('../../../permissions')
+// const permissions = require('../../../permissions')
 const ticketStatusSchema = require('../../../models/ticketStatus')
 
 const ticketsV2 = {}
@@ -240,16 +240,18 @@ ticketsV2.transferToThirdParty = async (req, res) => {
 }
 
 ticketsV2.getReplySuggestions = async (req, res) => {
-  const query = req.query.comment || 'Hello'
+  const comment = req.query.comment || 'Hello'
   const OpenAI = require('openai');
+  const proxyUrl = 'https://helpdesk.techtweekinfotech.com:8080';
   const openai = new OpenAI({
-    apiKey: process.env.OPEN_AI_SK
+    apiKey: process.env.OPEN_AI_SK,
+    proxy: proxyUrl
   });
 
   try {
     const completion = await openai.chat.completions.create({
       messages: [
-        { "role": "user", "content": query }],
+        { "role": "user", "content": comment }],
       model: "gpt-3.5-turbo",
     });
 

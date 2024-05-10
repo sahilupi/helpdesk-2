@@ -1,12 +1,12 @@
-var _ = require('lodash')
-var async = require('async')
-var Team = require('../../../models/team')
-var apiUtils = require('../apiUtils')
+const _ = require('lodash')
+// const async = require('async')
+const Team = require('../../../models/team')
+const apiUtils = require('../apiUtils')
 
-var apiTeams = {}
+const apiTeams = {}
 
 apiTeams.get = function (req, res) {
-  var limit = 10
+  let limit = 10
   if (!_.isUndefined(req.query.limit)) {
     try {
       limit = parseInt(req.query.limit)
@@ -15,7 +15,7 @@ apiTeams.get = function (req, res) {
     }
   }
 
-  var page = 0
+  let page = 0
   if (req.query.page) {
     try {
       page = parseInt(req.query.page)
@@ -24,9 +24,9 @@ apiTeams.get = function (req, res) {
     }
   }
 
-  var obj = {
-    limit: limit,
-    page: page
+  const obj = {
+    limit,
+    page
   }
 
   Team.getWithObject(obj, function (err, results) {
@@ -37,7 +37,7 @@ apiTeams.get = function (req, res) {
 }
 
 apiTeams.create = function (req, res) {
-  var postData = req.body
+  const postData = req.body
   if (!postData) return apiUtils.sendApiError_InvalidPostData(res)
 
   Team.create(postData, function (err, team) {
@@ -46,16 +46,16 @@ apiTeams.create = function (req, res) {
     team.populate('members', function (err, team) {
       if (err) return apiUtils.sendApiError(res, 500, err.message)
 
-      return apiUtils.sendApiSuccess(res, { team: team })
+      return apiUtils.sendApiSuccess(res, { team })
     })
   })
 }
 
 apiTeams.update = function (req, res) {
-  var id = req.params.id
+  const id = req.params.id
   if (!id) return apiUtils.sendApiError(res, 400, 'Invalid Team Id')
 
-  var putData = req.body
+  const putData = req.body
   if (!putData) return apiUtils.sendApiError_InvalidPostData(res)
 
   Team.findOne({ _id: id }, function (err, team) {
@@ -70,14 +70,14 @@ apiTeams.update = function (req, res) {
       team.populate('members', function (err, team) {
         if (err) return apiUtils.sendApiError(res, 500, err.message)
 
-        return apiUtils.sendApiSuccess(res, { team: team })
+        return apiUtils.sendApiSuccess(res, { team })
       })
     })
   })
 }
 
 apiTeams.delete = function (req, res) {
-  var id = req.params.id
+  const id = req.params.id
   if (!id) return apiUtils.sendApiError(res, 400, 'Invalid Team Id')
 
   Team.deleteOne({ _id: id }, function (err, success) {
